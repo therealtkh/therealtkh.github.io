@@ -57,7 +57,7 @@
 
 <p>It looks like a big mess, I know. All 7-segment displays except for the three in the bottom right corner were used for development purposes and could be removed. But instead of doing that, let&rsquo;s look at the design in a block diagram instead &ndash; with the same positions for all different parts, excluding debug features.</p>
 
-<img class="thumbnail" src="image004.png" data-high-res="image003.png" style="cursor: pointer;">
+<img class="thumbnail" src="image004.png" data-high-res="image003-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -83,7 +83,7 @@
 <p><strong>Clock</strong></p>
 <p>If using metaphors, the clock could be called the heart of the computer as it is essential to almost every block, and they will not function without it.</p>
 
-<img class="thumbnail" src="image006.png" data-high-res="image005.png" style="cursor: pointer;">
+<img class="thumbnail" src="image006.png" data-high-res="image005-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -94,7 +94,7 @@
 <li>HLT [CTRL 15], Halt Signal.</li>
 </ul>
 
-<img class="thumbnail" src="image008.png" data-high-res="image007.png" style="cursor: pointer;">
+<img class="thumbnail" src="image008.png" data-high-res="image007-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -110,7 +110,7 @@
 <li>RO &ndash; [CTRL 12], RAM Output. If held high, the contents of the currently set RAM address will be output on the common bus. Not clock triggered.</li>
 </ul>
 
-<img class="thumbnail" src="image010.png" data-high-res="image009.png" style="cursor: pointer;">
+<img class="thumbnail" src="image010.png" data-high-res="image009-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -118,7 +118,7 @@
 
 <p>The top left part is used to load RAM manually and the lines going left off screen are used when loading RAM automatically from the RAM Loader. Bottom inputs are the clock and reset signals. Bus connection is drawn as input on left side and the output on the right side of the symbol.</p>
 
-<img class="thumbnail" src="image012.png" data-high-res="image011.png" style="cursor: pointer;">
+<img class="thumbnail" src="image012.png" data-high-res="image011-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -130,7 +130,7 @@
 <p><strong>ROM to RAM Loader</strong></p>
 <p>Actually not an important part of the computer, but we should cover this block as it&rsquo;s a common feature in older computers and it made running different programs much easier once the assembler was finished and it was possible to copy a program from Excel directly into the ROM.</p>
 
-<img class="thumbnail" src="image014.png" data-high-res="image013.png" style="cursor: pointer;">
+<img class="thumbnail" src="image014.png" data-high-res="image013-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -139,7 +139,7 @@
 <p>The bottom right part has already been covered; it&rsquo;s the address input to RAM. Up top is the manual input of data to the bus; it was only used in the beginning when I had to manually program the computer RAM one byte at a time by flipping the address and data switches with control signals and clock. Now, this is almost automated: starting from a reset computer, one must first activate the automatic loader and simply run the computer for 16 clock cycles, then turn the auto load signal off and the computer is ready to be put in run state.</p>
 <p>I guess this part could have been automated a bit more with a counter that turns the automatic loader off after 16 cycles and puts the computer into run mode. However, this is still not an important part of the computer design, so I decided to leave it out and maybe revisit the idea in a future project.</p>
 
-<img class="thumbnail" src="image016.png" data-high-res="image015.png" style="cursor: pointer;">
+<img class="thumbnail" src="image016.png" data-high-res="image015-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -157,7 +157,7 @@
 <li>CO &ndash; [CTRL 1], Counter Out. Output the stored value to the common bus. Not clock triggered.</li>
 </ul>
 
-<img class="thumbnail" src="image018.png" data-high-res="image017.png" style="cursor: pointer;">
+<img class="thumbnail" src="image018.png" data-high-res="image017-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -165,7 +165,7 @@
 
 <p>Clock and reset inputs from bottom, debug value to the right and bus inputs connected to the common bus below. The counter block looks like this:</p>
 
-<img class="thumbnail" src="image020.png" data-high-res="image019.png" style="cursor: pointer;">
+<img class="thumbnail" src="image020.png" data-high-res="image019-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -174,7 +174,7 @@
 <p>This is quite straightforward, and this simple design gives us all features described before. In every command this computer has, the first step is to read out the counter value and place it in the memory address register. During next step in an instruction, along with other actions, the program counter will increase value by one.</p>
 <p>The observant reader noticed that there is one more block in the first image. It was a late addition to the design which is why it looks a bit squeezed between control bus and the counter block. The functionality actually belongs to the Flag Control and is used during conditional jumps.</p>
 
-<img class="thumbnail" src="image022.png" data-high-res="image021.png" style="cursor: pointer;">
+<img class="thumbnail" src="image022.png" data-high-res="image021-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -188,7 +188,7 @@
 <li>AI &ndash; [CTRL 9], A register in. If held high, the address register will be set on next rising clock edge.</li>
 <li>AO &ndash; [CTRL 8], A register out. If held high, the contents of the currently set RAM address will be output on the common bus. Not clock triggered.</li>
 </ul>
-<img class="thumbnail" src="image024.png" data-high-res="image023.png" style="cursor: pointer;">
+<img class="thumbnail" src="image024.png" data-high-res="image023-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -196,7 +196,7 @@
 
 <p>An important detail is that the upper output (where the display is connected &ndash; showing the current register value): it is always connected to the ALU, without control signal. The lower output is connected to the bus and needs to be activated.</p>
 
-<img class="thumbnail" src="image026.png" data-high-res="image025.png" style="cursor: pointer;">
+<img class="thumbnail" src="image026.png" data-high-res="image025-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -204,7 +204,7 @@
 
 <p>The sub circuit has an 8-bit register that works just like the registers do in the other blocks, and this circuit is used in several places in the computer.</p>
 
-<img class="thumbnail" src="image028.png" data-high-res="image027.png" style="cursor: pointer;">
+<img class="thumbnail" src="image028.png" data-high-res="image027-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -223,7 +223,7 @@
 <li>EO &ndash; [CTRL 7], Sum Output. When held high the value in the ALU will be output to the common bus.</li>
 </ul>
 
-<img class="thumbnail" src="image030.png" data-high-res="image029.png" style="cursor: pointer;">
+<img class="thumbnail" src="image030.png" data-high-res="image029-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -235,7 +235,7 @@
 <li>CF [FLG 1], Carry Flag. Output is high if the operation carries over 255 or below 0.</li>
 </ul>
 
-<img class="thumbnail" src="image032.png" data-high-res="image031.png" style="cursor: pointer;">
+<img class="thumbnail" src="image032.png" data-high-res="image031-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -252,7 +252,7 @@
 <li>IO &ndash; [CTRL 11], Instruction register out. If held high, the lower nibble in the register will be output on the common bus. Not clock triggered. The lower nibble can contain a command parameter, for example a memory address to use within the command. The higher nibble is passed on to the control ROM until the register is updated with a new instruction value.</li>
 </ul>
 
-<img class="thumbnail" src="image034.png" data-high-res="image033.png" style="cursor: pointer;">
+<img class="thumbnail" src="image034.png" data-high-res="image033-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -264,7 +264,7 @@
 <p>The term &ldquo;addresser&rdquo; might be a bit confusing but refers to a block that is automatically changing the address in the control ROM. Perhaps it could be called a &ldquo;sequencer&rdquo; instead. It&rsquo;s basically a 4-bit counter that potentially could go through from 0 to 15, but we&rsquo;re only using 0-4. Together with the Instruction Register output (4 bits) we get all addresses for the Control ROM.</p>
 <p>An example will make this clearer: let&rsquo;s take the command LDA &ndash; Load A register (with a value from RAM). It has the instruction code 0001 and this will be passed as the high nibble from the Instruction Register to the Control ROM during the entire instruction&rsquo;s five steps. The addresser then provides the lower nibble, counting from 0000 up to potentially 1111. The Control ROM would then for every clock cycle output control signals from its stored memory instruction set from addresses 0001 0000 to 0001 1111. As can be seen in the image below, there is a &ldquo;reset&rdquo; signal from bit 5 in the decoded value that will reset the addresser and instantly return it to 0000. So, in this design, the Control ROM will only use data from 0001 0000 to 0001 0100 (5 steps).</p>
 
-<img class="thumbnail" src="image036.png" data-high-res="image035.png" style="cursor: pointer;">
+<img class="thumbnail" src="image036.png" data-high-res="image035-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -272,7 +272,7 @@
 
 <p>Another important detail is the [INV_CLK] indicator. The Addresser will act on falling clock edge while almost all other blocks will act on rising edge. The reason is simple: all control signals will be set on falling clock edge, so they are stable and ready on the next rising clock edge.</p>
 
-<img class="thumbnail" src="image038.png" data-high-res="image037.png" style="cursor: pointer;">
+<img class="thumbnail" src="image038.png" data-high-res="image037-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -285,7 +285,7 @@
 <p>We have mentioned the Control ROM several times before, and if the clock is the heart of the computer, this would be the brain &ndash; making sure everything works together. The high nibble comes from the instruction register and will be the same during the entire command execution. The low nibble will start at 0000 and increase by 1 for every clock cycle until it resets at 0101 as mentioned in previous section.</p>
 <p>Because only 11 commands were implemented, and a maximum of 5 steps are used for commands, most of the control ROM is unused. However, the benefit of having a clear structure is worth a lot. We could have used a smaller range for the Addresser, maybe only 3 bits. The maximum length of a command would then be 8 cycles, but we could have used an extra bit to increase the number of commands or make variants of them. I never explored this though, as the Instruction Register is designed to manage up to 16 commands and that was enough for this computer.</p>
 
-<img class="thumbnail" src="image040.png" data-high-res="image039.png" style="cursor: pointer;">
+<img class="thumbnail" src="image040.png" data-high-res="image039-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -293,7 +293,7 @@
 
 <p>Together, these inputs form an address, and the contents will be output as control signals &ndash; 16 in total. There is actually nothing fancy in the sub circuit, only two ROM chips. The two ROM chips will receive the same address and the 8-bit data in each are output in parallel and gives the 16 control signals. The interesting part lies in the data stored in the ROMs.</p>
 
-<img class="thumbnail" src="image042.png" data-high-res="image041.png" style="cursor: pointer;">
+<img class="thumbnail" src="image042.png" data-high-res="image041-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -323,7 +323,7 @@
 <p>In the early instruction set, there was only one jump command: an unconditional jump that sets the RAM address for next command. As an example, it can be used if a program shall only count upwards, show result on display and loop around forever. The program would probably have three key commands: Output value from a Register A, add value from another register and finally the jump command to get back to the first. Not very exciting nor flexible.</p>
 <p>The last addition to the computer design was a conditional jump feature and is built out of two parts. First there is a standard register:</p>
 
-<img class="thumbnail" src="image044.png" data-high-res="image043.png" style="cursor: pointer;">
+<img class="thumbnail" src="image044.png" data-high-res="image043-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -335,7 +335,7 @@
 </ul>
 <p>The input to the Control ROM is also connected to a cluster of gates to give a &ldquo;true&rdquo; at the correct instruction step &ndash; working exactly like the Control ROM. All 16 outputs from the ROM were already used and two more were required for the conditional jumps.</p>
 
-<img class="thumbnail" src="image046.png" data-high-res="image045.png" style="cursor: pointer;">
+<img class="thumbnail" src="image046.png" data-high-res="image045-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -345,7 +345,7 @@
 <p>The saved flags are used as inputs to give out a true or false if a conditional jump (Zero or Carry) command is executed and the two resulting control signals are fed into the Conditional Jump block covered in the Program Counter part.</p>
 <p>The conditional jumps work by executing the command, which will have a new RAM address stored in the Instruction Register (as a parameter, the lower nibble). But we only want to jump if the associated flag is set &ndash; which will come from the Flag Register. One of the outputs (the upper, leaving to the left) will tell the Conditional Jump block that a conditional jump is being executed. Let&rsquo;s remind ourselves of how it looked:</p>
 
-<img class="thumbnail" src="image047.png" data-high-res="image021.png" style="cursor: pointer;">
+<img class="thumbnail" src="image047.png" data-high-res="image021-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -356,7 +356,7 @@
 <p><strong>Output</strong></p>
 <p>There are different ways to display data on 7-segment displays. Dedicated drivers, discrete logic or something in between. I went with the last variant, mostly because I wanted to try a ROM style output. For a simulation, it doesn&rsquo;t really matter.</p>
 
-<img class="thumbnail" src="image049.png" data-high-res="image048.png" style="cursor: pointer;">
+<img class="thumbnail" src="image049.png" data-high-res="image048-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -367,7 +367,7 @@
 <li>OI &ndash; [CTRL 4], Output Input. If held high, the address register will be set on next rising clock edge. Used to save the value so displays will show value until next time we update the display register.</li>
 </ul>
 
-<img class="thumbnail" src="image051.png" data-high-res="image050.png" style="cursor: pointer;">
+<img class="thumbnail" src="image051.png" data-high-res="image050-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
@@ -378,7 +378,7 @@
 <p><strong>Optimization mode</strong></p>
 <p>Another late addition to the computer is not essential for functionality is a form of optimization feature that was mostly added for fun. But it&rsquo;s in the design, so I&rsquo;ll cover it in brief detail for the sake of completeness.</p>
 
-<img class="thumbnail" src="image053.png" data-high-res="image052.png" style="cursor: pointer;">
+<img class="thumbnail" src="image053.png" data-high-res="image052-2.png" style="cursor: pointer;">
 <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
     <span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
