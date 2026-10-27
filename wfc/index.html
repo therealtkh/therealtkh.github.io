@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wave Function Collapse</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #2d3748;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f7fafc;
+        }
+        article {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+        .metadata {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 16px;
+        }
+        .tags {
+            margin-top: 8px;
+        }
+        .tag {
+            display: inline-block;
+            background: #edf2f7;
+            color: #4a5568;
+            padding: 2px 10px;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-right: 6px;
+        }
+        p {
+            margin-bottom: 1.25rem;
+        }
+        em {
+            font-style: italic;
+        }
+        ol {
+            margin-bottom: 1.25rem;
+            padding-left: 24px;
+        }
+        li {
+            margin-bottom: 0.5rem;
+        }
+        code {
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            background-color: #edf2f7;
+            color: #2d3748;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.875em;
+        }
+        pre {
+            background-color: #1a202c;
+            color: #e2e8f0;
+            padding: 18px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 1.25rem;
+            line-height: 1.45;
+        }
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            font-size: 0.9em;
+        }
+        .img-container {
+            width: 100%;
+            text-align: center;
+            margin: 24px 0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+<article>
+    <header>
+        <h1>Wave Function Collapse</h1>
+    </header>
+
+    <section class="content">
+        <p>In my previous article, I described a Wave Function Collapse (WFC from now on) inspired project where I explored the basic idea of randomness with restrictions, now it’s time for the real thing. In this article I’ll show the method I ended up with. In case you haven’t read the previous article, or if you read it a long time ago, I would suggest checking it first, as this project is a direct continuation of it and many parts are the same.</p>
+
+        <div class="img-container">
+            <img src="WFC_gif_new_tileset.gif" alt="Final Behavior">
+        </div>
+
+        <p>What a spoiler, that was the final result! So let’s take a big step back and take things in order, beginning where we left off in the previous post. First, I wanted to make the tileset (graphics) more compact and reduced it to one of each type (compare with previous post), so I implemented a method to rotate a tile and all its properties. Remember for later that this tileset can never fail to fill the board, but this is the new tileset:</p>
+
+        <div class="img-container">
+            <img src="WFC_01-tilesnew-5.png" alt="New Tileset">
+        </div>
+
+        <p>Previously we had a simple Boolean value to describe if a side had a connection or not, but if there are more connection points the system will be open for more advanced tiles. I decided to have three connections per side, same as in the WFC project I was inspired by, but there are still only two types in my project: <em>Blank</em> and <em>Road</em>.</p>
+
+<pre><code>public enum Edge { Blank, Road }
+…
+public Edge[] Up { get; set; }
+public Edge[] Down { get; set; }
+public Edge[] Left { get; set; }
+public Edge[] Right { get; set; }</code></pre>
+
+        <p>The class had to be updated to use an array of connections per side and was also upgraded with fields for <em>Entropy</em> and its state – if it’s <em>Collapsed</em> or not. Let me show an example of adding a tile, let’s use the 90 degree turn from the tileset above. The order of adding sides is: up, down, left, right. Going from left to right and top to bottom.</p>
+
+<pre><code>tiles.Add(new Tile(inputBitmap.Clone(new Rectangle(2 * tileSize, 0 * tileSize, tileSize, tileSize), format), 1,
+Edge.Blank, Edge.Road, Edge.Blank,
+Edge.Blank, Edge.Blank, Edge.Blank,
+Edge.Blank, Edge.Road, Edge.Blank,
+Edge.Blank, Edge.Blank, Edge.Blank));
+tmpTile = new Tile(tiles.Last());
+tiles.Add(tmpTile.Rotate(1));
+tmpTile = new Tile(tiles.Last());
+tiles.Add(tmpTile.Rotate(1));
+tmpTile = new Tile(tiles.Last());
+tiles.Add(tmpTile.Rotate(1));</code></pre>
+
+        <p>This will add the “turn 90 degrees tile”, set up (three) connections for all directions and finally the remaining three rotated versions of this tile. The ‘1’ in <em>Rotate(1)</em> means that the tile with all its properties will be rotated 90 degrees one time clockwise. Some tiles (like the straight connection only require one more variant, rotated 90 degrees) and some don’t need rotation at all (such as 4-way crossing or blank tiles). After going through the smaller tileset we now have a “library” equal to the old, but are prepared for more connection types.</p>
+
+        <p>As before, I decided to treat tiles outside the board as not connected, or “Blank”. Now I can compare the edges to each other in the same way as before. Note that I’m still placing tiles in order "top to bottom, left to right" (the final version comes further down):</p>
+
+<pre><code>Edge[] BoardEdge = { Edge.Blank, Edge.Blank, Edge.Blank };
+Edge[] connectionAbove = new Edge[3];
+if (y == 0)     // Top row, use Edge.Board
+    connectionAbove = BoardEdge;
+else            // Not at top row, set connectionAbove to above's Tile.Down
+    connectionAbove = field[y - 1, x].Down;
+
+if (x == 0)     // Leftmost column
+    connectionLeft = BoardEdge;
+else            // Not at leftmost column, change connectionLeft to the left tile's Tile.Right
+    connectionLeft = field[y, x - 1].Right;
+
+List&lt;Tile&gt; possibleTiles = new List&lt;Tile&gt;();
+    possibleTiles = (from connections in tiles
+    where connections.Up.SequenceEqual(connectionAbove)
+    where connections.Left.SequenceEqual(connectionLeft)
+    select connections).ToList();</code></pre>
+
+        <p>After creating a selection of tiles, I used the same weighting method as described in my previous post on this subject and the resulting board is ended up exactly the same as before (which is what we wanted to see), so with the new connection method working it was time to implement the collapse function. It will start the fill process in the mouse click position and then check all directions to calculate the new <em>Entropy</em> for the surrounding tiles before deciding where to place next tile.</p>
+
+        <p>I kept the same wording as was used in the project that inspired me, but instead of <em>Entropy</em> I could as well have called it <em>Possibilities</em> or something like that. This value is used when deciding which position is next to be evaluated. The flow looks like this after selecting a position:</p>
+
+        <ol>
+            <li>Create a tile selection consisting of all tiles in our library.</li>
+            <li>Check in each direction, if a tile in one of those <em>Positions</em> is <em>Collapsed</em> (has a placed tile) we need to reduce the selection and keep only the ones with matching sides.</li>
+            <li>If there are no matching tiles, we’ll place a “failed tile” and move on. This will not happen with the current tileset, but later on we will run into impossible patterns, as demonstrated in the gif in the beginning of this post.</li>
+            <li>For all matching tiles, randomize which tile to place using the weight system covered in the previous post and place it in the field (and mark the Position as collapsed).</li>
+            <li>Now check in all directions from the placed tile, any tile that is not collapsed will need its <em>Entropy</em> re-calculated. It is calculated in the same way as in steps 1-2 and the number of matching tiles is stored as a number.</li>
+            <li>All non-collapsed <em>Positions</em> are added to a List of <em>Positions</em> to evaluate, unless already in the List of course.</li>
+            <li>From the List of all <em>Positions</em> to evaulate, the one with the lowest <em>Entropy</em> is selected to be the next <em>Position</em> to evaluate and we’ll start all over with number 1 again until we have filled the entire field. If there are several <em>Positions</em> with same <em>Entropy</em> the one with lowest index (placed in the List first) will be next.</li>
+        </ol>
+
+        <div class="img-container">
+            <img src="WFC_gif_old_tileset.gif" alt="Functional Wave Function Collapse">
+        </div>
+
+        <p>This method should make sure that <em>Positions</em> with the lowest <em>Entropy</em> (has fewest possible, fitting tiles) are dealt with first. I’ll show a few key code blocks to explain how I implemented the steps.</p>
+
+<pre><code>workingTiles = new List&lt;Position&gt;();
+Position nextPos = new Position(x, y);  
+workingTiles.Add(nextPos);
+while (nextPos != null) // we return null if workingTiles.Count == 0
+{
+    nextPos = NextTileInEntropyOrder(nextPos);     
+}</code></pre>
+
+        <p>When starting the algorithm, the <em>workingTiles</em> List will contain only one <em>Position</em>. In the first loop, up to four new <em>Positions</em> will be added to the List. Remember that we will only add new <em>Positions</em> that are not already <em>Collapsed</em>, and of course not <em>Positions</em> that are out of bounds. The function <em>NextTileInEntropyOrder(Position nextPos)</em> will return the next <em>Position</em> to evaluate until the entire board has been filled, in which case it returns null and ends the while-loop.</p>
+
+        <p>The method to reduce the selection of possible tiles to use is similar what we used before, but now we check in all four directions every time. The example below shows the first steps and checking the tile above.</p>
+
+<pre><code>Edge[] BoardEdge = new Edge[] { Edge.Blank, Edge.Blank, Edge.Blank };
+List&lt;Tile&gt; possibleTiles = new List&lt;Tile&gt;(tiles);
+int x = currentPos.X;
+int y = currentPos.Y;
+if (y == 0)
+{
+    possibleTiles = (from connections in possibleTiles
+    where connections.Up.SequenceEqual(BoardEdge) 
+    select connections).ToList();
+}
+else if (field[y - 1, x].Collapsed == true)
+{
+    possibleTiles = (from connections in possibleTiles
+    where connections.Up.SequenceEqual(field[y - 1, x].Down)
+    select connections).ToList();
+}</code></pre>
+
+        <p>To be able to compare width board edges (if we’re on the top row, meaning y is 0) we use the <em>BoardEdge</em>, otherwise we compare with above tile (if it has been placed, which means that <em>Collapsed</em> is true). The result is used to remove non-matching tiles from the List of possible tiles to place. This procedure is repeated for every direction and in the end, we might have a handful of matching tiles to choose from (otherwise we will place the “failed” tile). After this, we mark the <em>Position</em> as <em>Collapsed</em>, draw it, and calculate <em>Entropy</em> for all non-collapsed tiles in all four directions. Showing the initial steps and first direction below:</p>
+
+<pre><code>field[y, x].Collapsed = true;
+workingTiles.Remove(currentPos);        // We have added current position to the field, remove it from workingTiles
+if (y != 0 &amp;&amp; field[y - 1, x].Collapsed == false)   // Add above tile if it's not outside field or already Collapsed
+{
+    Position newPos = new Position(x, y - 1);
+    if (workingTiles.Contains(newPos) == false)
+        workingTiles.Add(newPos);
+    UpdateEntropy(x, y - 1);
+}</code></pre>
+
+        <p>The <em>UpdateEntropy(int x, int y)</em> looks almost identical to how we make a tile selection, so I won’t show a code example from that function. So: we are checking the tiles in all four directions, and calculate that tile's <em>Entropy</em> by checking in all four directions from <em>that</em> tile. But not for <em>Collapsed</em> tiles, of course.</p>
+
+        <p>The key in this algorithm, except for placing matching tiles, is to select the next tile based on the <em>Entropy</em> value so we will look through the list of <em>Positions</em> to work with and select the one with lowest <em>Entropy</em>. This means that the <em>Positions</em> with fewest possible matching tiles will be evaluated first.</p>
+
+<pre><code>if (workingTiles.Count &gt; 0)     //Check Entropy for all tiles in workingTiles and return the one with lowest
+{
+    int lowestEntropyIndex = 999999;
+    int lowestEntropy = 999999;
+
+    for (int i = 0; i &lt; workingTiles.Count; i++)
+    {
+        int tmpEntropy = field[workingTiles[i].Y, workingTiles[i].X].Entropy;
+        if (tmpEntropy &lt; lowestEntropy)
+        {
+            lowestEntropy = tmpEntropy;
+            lowestEntropyIndex = i;
+        }
+    }
+    return new Position(workingTiles[lowestEntropyIndex].X, 
+        workingTiles[lowestEntropyIndex].Y);
+}
+return null; // This will happen when the last tile has been placed and workingTiles is empty</code></pre>
+
+        <p>And with that piece of code we are pretty much done! But the tileset we have used up until now is not very exciting, it’s time to take the project to the next level and use a more interesting tileset. I will use the same one that was used in the project I was inspired by. I added a few more though, partly to make it more “complete” but also because I kept running into impossible pattern combinations and in turn had problems finishing a full, large sized board.</p>
+
+        <div class="img-container">
+            <img src="WFC_02-circuit-3.png" alt="New Tileset">
+        </div>
+
+        <p>This is some form of made-up circuit board with four different surface/connection types, and the new enumeration looks like this:</p>
+
+<pre><code>public enum Edge { Board, Chip, Bridge, Trace }</code></pre>
+
+        <p>The first tile, in pink, is only used if no matching tile is found – the so-called “Failed Positions”, after that it’s pretty straight-forward: Dark green is the board, light green is a trace, the gray traces are some kind of wire/bridge and the dark gray is a chip. And when declaring them I do the same as before – define all connections for each side. On the first row, all tiles are used, but not all on second, I added a bunch more but not all of them helped in the task of finding solutions – some even made it worse. Here are two examples, a trace connecting to a chip and then a bridge over a trace (they have index 5 and 8 on the first row):</p>
+
+<pre><code>tiles.Add(new Tile(inputBitmap.Clone(new Rectangle(5 * tileSize, 0 * tileSize, tileSize, tileSize), format), 3,
+Edge.Chip, Edge.Board, Edge.Board,
+Edge.Chip, Edge.Board, Edge.Board,
+Edge.Chip, Edge.Chip, Edge.Chip,
+Edge.Board, Edge.Trace, Edge.Board)); // Chip side with trace connector
+tmpTile = new Tile(tiles.Last());
+tiles.Add(tmpTile.Rotate(1));
+tmpTile = new Tile(tiles.Last());
+tiles.Add(tmpTile.Rotate(1));
+tmpTile = new Tile(tiles.Last());
+tiles.Add(tmpTile.Rotate(1));</code></pre>
+
+<pre><code>tiles.Add(new Tile(inputBitmap.Clone(new Rectangle(8 * tileSize, 0 * tileSize, tileSize, tileSize), format), 1,
+Edge.Board, Edge.Bridge, Edge.Board,
+Edge.Board, Edge.Bridge, Edge.Board,
+Edge.Board, Edge.Trace, Edge.Board,
+Edge.Board, Edge.Trace, Edge.Board)); // Trace/Bridge crossing
+tmpTile = new Tile(tiles.Last());
+tiles.Add(tmpTile.Rotate(1));</code></pre>
+
+        <p>Note that the first tile is added with three additional rotations, and the other only needed one rotation (as a second rotation would be identical to the first). When changing tileset I had to update a few lines of code, but not many. Size of tile (in pixels) is larger and since I updated the <em>Enumeration</em> with connection types I had to redefine what a blank side should be (instead of 3x <em>Edge.Blank</em> they will now be 3x <em>Edge.Board</em>). And I should mention that in case the failed/error tile has been placed it will have the connection <em>Edge.Board</em> in all directions to make it easier to fill the rest of the board.</p>
+
+        <div class="img-container">
+            <img src="WFC_03-failed-3.png" alt="Failed Combination">
+        </div>
+
+        <p>As mentioned before, this tileset will not always find a solution, and this scenario can be handled in various ways. I added a flag which is set in case a “failed” tile has been placed. Then it’s easy to loop until a solution is found. If using a loop, you shouldn’t use a seed as next try would give exactly the same result. In the gif in the beginning I actually used a fixed seed.</p>
+
+        <p>With all this functionality I actually felt satisfied with this project, now you can look at the gif at the top and hopefully understand what’s going on! There are of course many more things to try, it would for example be really fun to create randomized maps or cities! Those would have to come with more rules, and probably also backtracking in case of impossible solutions. I guess we’ll see if I explore those topics in the future.</p>
+
+        <p>Feel free to follow, find me on YouTube or Discord, and take care! :)</p>
+    </section>
+</article>
+
+</body>
+</html>
