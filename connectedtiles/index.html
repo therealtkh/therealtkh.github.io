@@ -89,27 +89,19 @@
 <article>
     <header>
         <h1>Connected Tiles</h1>
-        <div class="metadata">
-            <span>Published on: June 13, 2023</span>
-            <div class="tags">
-                <span class="tag">programming</span>
-                <span class="tag">coding</span>
-                <span class="tag">wave function collapse</span>
-            </div>
-        </div>
     </header>
 
     <section class="content">
         <p>After watching a programming video on <em>Wave Function Collapse</em> (<em>WFC</em> from now on) I got inspired to play around with connected tiles. I didn't want a direct copy, so I made a challenge of my own with randomness and connected tiles. And as far as I understood the concept of <em>WFC</em>, it shall contain a bit more than what I did, but the basic idea is similar (or even the same?), but it might be called somehting else.</p>
 
         <div class="img-container">
-            <img src="CT_01-final.png" alt="End result" />
+            <img src="CT_01-final.png" alt="End result">
         </div>
 
         <p>I started with deciding on what tileset to use. I made one myself and it only contains a black line (the connecting one) on a white background. The tiles are 16x16 pixels and to save a bit of time on programming, I included all the rotated parts as well. In a future version, this set should only contain six tiles. To clearer indicate a "start/stop" tile I made it into a blob. It makes the tiles look more like a circuit board than a road system, but either one works for me. (I've seen a few examples of <em>WFC</em> using circuit board tilesets.)</p>
 
         <div class="img-container">
-            <img src="CT_02-tiles.png" alt="Tiles" />
+            <img src="CT_02-tiles.png" alt="Tiles">
         </div>
 
         <p>The <em>Tile</em> class is very simple, and because I don't need to handle rotation in this first test, I simply have a boolean value for each side with a connection (Up, Down, Left, Right). And when selecting the next tile I will only look at the adjacent neighbors going from left to right, top to bottom (which means I only need to match with up and left). Someone called this a <em>Linear Scanline</em> method, but I don't know if that's an established term. Most examples of <em>WFC</em> I've seen seem to use more of a floodfill style, and maybe even in order of tiles with lowest <em>entropy</em>/possible choices first. But in this post, we'll keep it simple!</p>
@@ -148,7 +140,7 @@ possibleTiles = (from connections in tiles
         <p>We finally have a list of possible tiles to place. But they are equally probable (towards each other within the final selection) and creates very boring patterns. Looking at it, I just get a feeling of random noise, and it's not what I'm after.</p>
 
         <div class="img-container">
-            <img src="CT_03-equal.png" alt="Result with equal weight" />
+            <img src="CT_03-equal.png" alt="Result with equal weight">
         </div>
 
         <p>A very simple solution (or addon) is to add weigths to tiles. So I included one more value in the <em>Tile</em> class:</p>
@@ -176,19 +168,19 @@ possibleTiles = (from connections in tiles
         <p>Now when I declare the tiles, I specify a weight to each tile that will affect how common they are. In the previous example, it would mean that all have equal weight. To get the desired pattern, simply increase the ones you want more of, and after that it's a matter of tuning. So let's see how it looks if I give empty tiles a weight of 30, straight "roads" a weight of 15 and keeping the rest as 1.</p>
 
         <div class="img-container">
-            <img src="CT_04-30empty_15straights.png" alt="Result with empties and straights" />
+            <img src="CT_04-30empty_15straights.png" alt="Result with empties and straights">
         </div>
 
         <p>As expected, many straight lines and lots of space! There are probably many ways to implement a weight system, I made up one myself and did not look for other methods for this project. It seems to be working for this application though, so let's look at how it works. I have made up an example based on the values used in the previous screenshot (weight 15 for straights). If we have this scenario:</p>
 
         <div class="img-container">
-            <img src="CT_05-scenario-1-2.png" alt="Scenario 1" />
+            <img src="CT_05-scenario-1-2.png" alt="Scenario 1">
         </div>
 
         <p>It is time to place the center tile, and the List of <em>possibleTiles</em> now only contains four tiles that fit the center piece:</p>
 
         <div class="img-container">
-            <img src="CT_06_scenario-2-2.png" alt="Scenario 2" />
+            <img src="CT_06_scenario-2-2.png" alt="Scenario 2">
         </div>
 
         <p>Without weigths, it would be the same probability for either one of these tiles, but here we have 15 times higher weight for the straight connection. It doesn't always mean 15 times more probable though, it depens on how many other tiles we have, and what weights they have. We will look at the ratio of tile weigth versus the total weigth.</p>
@@ -222,7 +214,7 @@ return possibleTiles[range[selected]];     // ...to get the weighted result</cod
         <p>With the odds in this example, I wouldn't call the straight connection very "lucky" with a ~83% probability. The other three have ~6% chance each (so in this example the straight one is eactly 15 times more probable than one of the other individuals, but only 5 times as probable than <em>any</em> other tile). The tricky part is now to find a good balance between them all. A larger field helps for sure, here I have mixed things up a bit and increased the size.</p>
 
         <div class="img-container">
-            <img src="CT_07-40-30.png" alt="Final result larger" />
+            <img src="CT_07-40-30.png" alt="Final result larger">
         </div>
 
         <p>Before we end I should mention the seed (seen in the title in each screenshot). It's not of importance for this test project, but I like the idea of including seeds into the projects using a random number generator. It makes it easier to go back in case of problems, or to share an interesting pattern.</p>
