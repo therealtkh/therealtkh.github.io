@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connected Tiles</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        article {
+            background: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            color: #111;
+        }
+        .metadata {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 12px;
+        }
+        .tags {
+            margin-top: 8px;
+        }
+        .tag {
+            display: inline-block;
+            background: #eef2f5;
+            color: #4a5568;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 6px;
+        }
+        p {
+            margin-bottom: 1.2rem;
+        }
+        em {
+            font-style: italic;
+        }
+        code {
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            background-color: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 16px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 1.2rem;
+        }
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border-radius: 4px;
+        }
+        .img-container {
+            width: 100%;
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+<article>
+    <header>
+        <h1>Connected Tiles</h1>
+        <div class="metadata">
+            <span>Published on: June 13, 2023</span>
+            <div class="tags">
+                <span class="tag">programming</span>
+                <span class="tag">coding</span>
+                <span class="tag">wave function collapse</span>
+            </div>
+        </div>
+    </header>
+
+    <section class="content">
+        <p>After watching a programming video on <em>Wave Function Collapse</em> (<em>WFC</em> from now on) I got inspired to play around with connected tiles. I didn't want a direct copy, so I made a challenge of my own with randomness and connected tiles. And as far as I understood the concept of <em>WFC</em>, it shall contain a bit more than what I did, but the basic idea is similar (or even the same?), but it might be called somehting else.</p>
+
+        <div class="img-container">
+            <img src="https://staging.cohostcdn.org/attachment/9dd0b5cf-3483-4567-98e1-83bb28ba8684/CT_01-final.png" alt="End result" />
+        </div>
+
+        <p>I started with deciding on what tileset to use. I made one myself and it only contains a black line (the connecting one) on a white background. The tiles are 16x16 pixels and to save a bit of time on programming, I included all the rotated parts as well. In a future version, this set should only contain six tiles. To clearer indicate a "start/stop" tile I made it into a blob. It makes the tiles look more like a circuit board than a road system, but either one works for me. (I've seen a few examples of <em>WFC</em> using circuit board tilesets.)</p>
+
+        <div class="img-container">
+            <img src="https://staging.cohostcdn.org/attachment/c0f7542e-8cf6-48ec-909e-40a187d9ed1a/CT_02-tiles.png" alt="Tiles" />
+        </div>
+
+        <p>The <em>Tile</em> class is very simple, and because I don't need to handle rotation in this first test, I simply have a boolean value for each side with a connection (Up, Down, Left, Right). And when selecting the next tile I will only look at the adjacent neighbors going from left to right, top to bottom (which means I only need to match with up and left). Someone called this a <em>Linear Scanline</em> method, but I don't know if that's an established term. Most examples of <em>WFC</em> I've seen seem to use more of a floodfill style, and maybe even in order of tiles with lowest <em>entropy</em>/possible choices first. But in this post, we'll keep it simple!</p>
+
+        <p>Because I start in the top-left corner, I obviously can't match tiles above or to the left, so I decided to treat all tiles off-grid as having no connections. It isn't very important but that's why there are no connections going off-grid, and doing this check first made the code for the next step a bit simpler.</p>
+
+<pre><code>bool connectionAbove = false;
+bool connectionLeft = false;</code></pre>
+
+<pre><code>if (y != 0)     // If we're on top row we'll keep connectionAbove as false
+    if (field[y - 1, x].Down == true)    // Check if tile above has a connection (downwards)
+        connectionAbove = true;</code></pre>
+
+<pre><code>if (x != 0)    // Same as before, but with leftmost column
+    if (field[y, x - 1].Right == true)    // Check connection in tile to the left
+        connectionLeft = true;</code></pre>
+
+<pre><code>List&lt;Tile&gt; possibleTiles = new List&lt;Tile&gt;();
+possibleTiles = (from connections in tiles
+                 where connections.Up == connectionAbove    
+                 where connections.Left == connectionLeft
+                 select connections).ToList();</code></pre>
+
+        <p>With one simple "query" we have a list of tiles that connects correctly to tiles above and to the left. The fun thing with Lists is that we can do a sub-selection with new parameters for those tiles. And then again: I actually only check for one additional thing: if we are on bottom row or rightmost column (same as for top row or leftmost column). In those cases I want to remove tiles connecting downwards or the the right.</p>
+
+<pre><code>if (y + 1 == sizeY)
+    possibleTiles = (from connections in possibleTiles
+                     where connections.Down == false
+                     select connections).ToList();</code></pre>
+
+<pre><code>if (x + 1 == sizeX)
+    possibleTiles = (from connections in possibleTiles
+                     where connections.Right == false
+                     select connections).ToList();</code></pre>
+
+        <p>We finally have a list of possible tiles to place. But they are equally probable (towards each other within the final selection) and creates very boring patterns. Looking at it, I just get a feeling of random noise, and it's not what I'm after.</p>
+
+        <div class="img-container">
+            <img src="https://staging.cohostcdn.org/attachment/9ebc4a14-08cb-4502-95ef-cc27cecc4a76/CT_03-equal.png" alt="Result with equal weight" />
+        </div>
+
+        <p>A very simple solution (or addon) is to add weigths to tiles. So I included one more value in the <em>Tile</em> class:</p>
+
+<pre><code>public class Tile
+{
+    public Bitmap Image { get; }
+    public bool Up { get; }
+    public bool Down { get; }
+    public bool Left { get; }
+    public bool Right { get; }
+    public int Weight { get; }
+
+    public Tile(Bitmap image, int weight, bool up, bool down, bool left, bool right)
+    {
+        this.Image = image;
+        this.Weight = weight;
+        this.Up = up;
+        this.Down = down;
+        this.Left = left;
+        this.Right = right;
+    }
+}</code></pre>
+
+        <p>Now when I declare the tiles, I specify a weight to each tile that will affect how common they are. In the previous example, it would mean that all have equal weight. To get the desired pattern, simply increase the ones you want more of, and after that it's a matter of tuning. So let's see how it looks if I give empty tiles a weight of 30, straight "roads" a weight of 15 and keeping the rest as 1.</p>
+
+        <div class="img-container">
+            <img src="https://staging.cohostcdn.org/attachment/a587d80d-ec21-48d5-a4c4-dc63bf354a56/CT_04-30empty_15straights.png" alt="Result with empties and straights" />
+        </div>
+
+        <p>As expected, many straight lines and lots of space! There are probably many ways to implement a weight system, I made up one myself and did not look for other methods for this project. It seems to be working for this application though, so let's look at how it works. I have made up an example based on the values used in the previous screenshot (weight 15 for straights). If we have this scenario:</p>
+
+        <div class="img-container">
+            <img src="https://staging.cohostcdn.org/attachment/de267c59-6dc7-4fa5-b8c1-ea594fa6c46d/CT_05-scenario-1-2.png" alt="Scenario 1" />
+        </div>
+
+        <p>It is time to place the center tile, and the List of <em>possibleTiles</em> now only contains four tiles that fit the center piece:</p>
+
+        <div class="img-container">
+            <img src="https://staging.cohostcdn.org/attachment/8ebc1ab0-f957-43b2-b075-8ddec0d4924d/CT_06_scenario-2-2.png" alt="Scenario 2" />
+        </div>
+
+        <p>Without weigths, it would be the same probability for either one of these tiles, but here we have 15 times higher weight for the straight connection. It doesn't always mean 15 times more probable though, it depens on how many other tiles we have, and what weights they have. We will look at the ratio of tile weigth versus the total weigth.</p>
+
+<pre><code>int totalWeight = 0;    // To calculate total weight of possibleTiles
+for (int i = 0; i &lt; possibleTiles.Count; i++)
+{
+    totalWeight += possibleTiles[i].Weight;     // Add to total weight
+}
+int[] range = new int[totalWeight];     // Create array with same length as weight</code></pre>
+
+        <p>First I calculate a total weight for all possible tiles. In this example it would mean:</p>
+<pre><code>1 + 1 + 15 + 1 = 18</code></pre>
+        <p>Then I create an array of integers, 18 numbers long, and fill it with the corresponding index from <em>possibleTiles</em></p>
+<pre><code>int index = 0;      // What slot in above array we shall fill
+for (int i = 0; i &lt; possibleTiles.Count; i++)   // Loop through the candidates...
+{
+    for (int j = 0; j &lt; possibleTiles[i].Weight; j++)  // ...and "weight" times...
+    {
+        range[index] = i;       // ...to fill with that candidate number
+        index++;                
+    }
+}</code></pre>
+        <p>In this example, it would mean that 15 out of the 18 values in the array <em>range</em> get the number (index) 2 (which corresponds to the straight tile):</p>
+<pre><code>[0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3]</code></pre>
+        <p>After this, simply randomize a number and we have a lucky winner of the center tile slot!</p>
+
+<pre><code>int selected = rnd.Next(totalWeight);      // Random value in total weight...
+return possibleTiles[range[selected]];     // ...to get the weighted result</code></pre>
+
+        <p>With the odds in this example, I wouldn't call the straight connection very "lucky" with a ~83% probability. The other three have ~6% chance each (so in this example the straight one is eactly 15 times more probable than one of the other individuals, but only 5 times as probable than <em>any</em> other tile). The tricky part is now to find a good balance between them all. A larger field helps for sure, here I have mixed things up a bit and increased the size.</p>
+
+        <div class="img-container">
+            <img src="https://staging.cohostcdn.org/attachment/53ea046b-3e3a-457c-bcbe-0190ba0f48fb/CT_07-40-30.png" alt="Final result larger" />
+        </div>
+
+        <p>Before we end I should mention the seed (seen in the title in each screenshot). It's not of importance for this test project, but I like the idea of including seeds into the projects using a random number generator. It makes it easier to go back in case of problems, or to share an interesting pattern.</p>
+
+        <p>And that's how far this project reaches, I'm happy with the outcome, and I would really like to step things up a bit with more interesting tiles (like roads, parks and different types of buildings), try to add more rules but most of all use tiles with more connections per side. If I would be using the same tileset as in this post, using three connections per side, the "road" would be the center part of each side and every tile would have a total of eight connections.</p>
+
+        <p>Feel free to leave me your thoughts and ideas, thanks for reading!</p>
+    </section>
+</article>
+
+</body>
+</html>
