@@ -4,85 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connected Tiles</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f9f9f9;
-        }
-        article {
-            background: #fff;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-        h1 {
-            font-size: 2.2rem;
-            margin-bottom: 8px;
-            color: #111;
-        }
-        .metadata {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 24px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 12px;
-        }
-        .tags {
-            margin-top: 8px;
-        }
-        .tag {
-            display: inline-block;
-            background: #eef2f5;
-            color: #4a5568;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            margin-right: 6px;
-        }
-        p {
-            margin-bottom: 1.2rem;
-        }
-        em {
-            font-style: italic;
-        }
-        code {
-            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
-            background-color: #f4f4f4;
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-size: 0.9em;
-        }
-        pre {
-            background-color: #282c34;
-            color: #abb2bf;
-            padding: 16px;
-            border-radius: 6px;
-            overflow-x: auto;
-            margin-bottom: 1.2rem;
-        }
-        pre code {
-            background-color: transparent;
-            color: inherit;
-            padding: 0;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 20px auto;
-            border-radius: 4px;
-        }
-        .img-container {
-            width: 100%;
-            text-align: center;
-            margin: 20px 0;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -220,8 +142,6 @@ return possibleTiles[range[selected]];     // ...to get the weighted result</cod
         <p>Before we end I should mention the seed (seen in the title in each screenshot). It's not of importance for this test project, but I like the idea of including seeds into the projects using a random number generator. It makes it easier to go back in case of problems, or to share an interesting pattern.</p>
 
         <p>And that's how far this project reaches, I'm happy with the outcome, and I would really like to step things up a bit with more interesting tiles (like roads, parks and different types of buildings), try to add more rules but most of all use tiles with more connections per side. If I would be using the same tileset as in this post, using three connections per side, the "road" would be the center part of each side and every tile would have a total of eight connections.</p>
-
-        <p>Feel free to leave me your thoughts and ideas, thanks for reading!</p>
     </section>
 </article>
 
