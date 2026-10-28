@@ -256,6 +256,106 @@ private void UpdateCombinedField()
         <p>For every pixel in the 8x8 tile, color is picked by looking through the two bit planes called tile1 and tile2. They are simply byte arrays with eight bytes in each and they are obviously updated with new values (when clicking on a tile in the character map) before running this function. We also have a list of brushes, and which one to use for a given pixel is decided in the inner for-loop by looking at the same pixel in both bit planes.</p>
 
         <p>The (1 &amp; var) checks if the lowest bit is set (1), adding 1 and/or 2 to the color picker depending on value in each bit plane. The lowest bit is on the rightmost side and that's the reason for starting with x = 7. This gives a color value from 0 to 3, the pixel is then drawn with the corresponding brush. After this, the tile byte is shifted one step right and the next pixel on the row is checked and drawn - to the left of the previous pixel. This is repeated for each bit and each byte which means that the double for-loops will run a total of 64 times (and check both planes each time). Simple, right?</p>
+    
+    <h2>Proper decompression of tile data for font</h2>
+        
+        <p>Even though the “Video RAM” method works perfectly (explained in part two) I was still curious about the LZSS algorithm and looked a bit more into that. Internet searches took me to a forum question regarding this very specific topic (and I hope all external links stays active!):</p>
+
+        <p><a href="https://www.romhacking.net/forum/index.php?topic=25578.0" target="_blank" rel="noopener">https://www.romhacking.net/forum/index.php?topic=25578.0</a></p>
+
+        <p>One of the replies took me to a github project to decompress various SNES games:</p>
+
+        <p><a href="https://github.com/Osteoclave/game-tools/tree/main/snes" target="_blank" rel="noopener">https://github.com/Osteoclave/game-tools/tree/main/snes</a></p>
+
+        <p><em>ActRaiser</em> was developed by <em>Quintet</em> and it seems they used the same LZSS algorithm for several games. This GitHub repo had among other things python scripts for compressing and decompressing compressed graphics from these games. I already had Python installed for Visual Studio so I copied the decompression code into a new project and could eventually run it.</p>
+
+        <p>The web page with the previously mentioned compression information also have a somewhat extensive description of the <em>ActRaiser</em> ROM file:</p>
+
+        <p><a href="https://datacrystal.romhacking.net/wiki/ActRaiser:ROM_map" target="_blank" rel="noopener">https://datacrystal.romhacking.net/wiki/ActRaiser:ROM_map</a></p>
+
+        <p>Among other interesting details, this row gave additional critical information:</p>
+
+<pre><code>0xBECFB to 0xBF7A1 = Compressed font graphics (2BPP GameBoy0xFormat)</code></pre>
+
+        <p>This part of the ROM could in other words contain all text I was actually looking for in the beginning, but I had given up on this track long ago due to the compression. But with a decompression tool at hand I was back for an additional go. I had already extracted all data from this address segment into a separate file (easily done on <a href="https://hexed.it" target="_blank" rel="noopener">https://hexed.it</a>) of 2,727 bytes. It was for me unknown if the compressed data could be decompressed as a stand-alone file or if decompression was made for a larger ROM area and requires more data before and/or after. Only one way to find out, and running the script without parameters gives some info about how to run it (note: I shortened the "path" in all below pastes):</p>
+
+<pre><code>Usage: &lt;path&gt;\LZSS_decomp.py &lt;inFile&gt; &lt;startOffset&gt; [outFile]</code></pre>
+
+        <p>So I ran the script twice, note the difference in the offset value:</p>
+
+<pre><code>&lt;path&gt;LZSS_decomp.py ActRaiser.smc 0xBECFB a.smc
+Last offset read, inclusive: BF7A1
+Compressed size: 0xAA7 (2727) bytes
+Uncompressed size: 0x1000 (4096) bytes
+Ratio: 0.665771
+
+&lt;path&gt;LZSS_decomp.py ActRaiser_Font.smc 0x00 a_f.smc
+Last offset read, inclusive: AA6
+Compressed size: 0xAA7 (2727) bytes
+Uncompressed size: 0x1000 (4096) bytes
+Ratio: 0.665771</code></pre>
+
+        <p>After these operations I had two files with the exact same size (4096 bytes) and after a quick check in a hex editor they seemed identical. Running the file compare tool proved they were equal:</p>
+
+<pre><code>&lt;path&gt;fc /b a.smc a_f.smc
+Comparing files a.smc and A_F.SMC
+FC: no differences encountered</code></pre>
+
+        <p>Perhaps perfectly logical if you know the algorithm, but it seems to know when to stop based on values or the script has a maximum block size. At this time I haven’t looked much into the code and definitely not for this detail.</p>
+
+        <p>If all went according to plans (and hopes) any one of the two files would now contain uncompressed font graphics. But I knew I would have at least one more step as the graphics would probably be using the SNES combined/spliced bit plane system. Previously I had made a simple tool to convert a hex string from the combined/spliced data into split byte order, but now I needed it for an entire file. To write that code didn't take long as already knew what to do, and then I opened the new file in the <em>Tile Editor</em>.</p>
+
+        <p>It actually looked like it worked but some colors were wrong. I had a feeling they would be because I had to change order (of the bit planes) with my first <em>Tile Transformer</em> tool. But after fixing that it looks fine! Note: I manually set a green instead of transparent background to make the four colors easier to see.</p>
+
+        <div class="img-container">
+            <img src="3_01_Tile_Editor_2_Real.png" alt="Tile Editor 2 Original File" />
+        </div>
+
+        <p>A perfect match to the previous ‘0’ extracted from Video RAM (and of course to the manually drawn character from before)!</p>
+
+        <p>Finally, after lots of manual work and unexpected detours the entire tilemap was extracted from the ROM to a format I could use. The entire Video RAM is much larger but it seems like the “font block” was contained in this 16x16 tile block. And with 16 bytes per tile it matches the 4096 byte file size. In the Tile Editor it’s easy to remove characters anywhere in the file and by using the “Insert” function it’s not too much work to move characters from one position to another.</p>
+
+        <div class="img-container">
+            <img src="3_02_Tile_Editor_2_Japanese.png" alt="Tile Editor 2 Japanese Sign" />
+        </div>
+
+        <p>Holding Shift will change the “Add” button to “Ins”, as can be seen in the image, which will insert a new “character row” at the marked position. A minor, but interesting, detail is that Japanese characters are all white with no shadows.</p>
+
+        <h2>Video RAM Dump Method</h2>
+
+        <p>I didn’t at the time, but I could have made a Video RAM dump and looked for a match for characters, so I will show that as well. We can use the address from the <em>Tile Viewer</em> in <em>Mesen-S</em> to find a reference character, let’s use the ‘0’ in address $A300:</p>
+
+        <div class="img-container">
+            <img src="3_03_MesenS_Tile_Viewer.png" alt="Mesen-S Tile Viewer" />
+        </div>
+
+        <p>And then looking in Video RAM in <em>Memory Tools</em> in <em>Mesen-S</em>:</p>
+
+        <div class="img-container">
+            <img src="3_04_MesenS_Memory_Tools.png" alt="Mesen-S Memory Viewer" />
+        </div>
+
+        <p>The character ‘0’ should be the hex string to look for, these are the “hex strings” I copied when using the <em>Tile Transformer</em> in the method covered in the second post.</p>
+
+        <p>Knowing what we do now, it’s expected to find the string in the decompressed file extracted from ROM and we can confirm it with a quick search (using the same hex editor as before) and we can find our character at address $300.</p>
+
+        <div class="img-container">
+            <img src="3_05_RealData_Hex_Viewer.png" alt="Original file in hex viewer" />
+        </div>
+
+        <p>The file size is as mentioned previously 4096 bytes but Video RAM is 64kB, so I knew we wouldn’t have to be at address $A300, but it makes sense when looking at the <em>Tile Viewer</em> in a screenshot further up. If the blank tile to the left of "TIME" has address $0000 it means that the character 0 we searched for has position 48 (16 tiles per row, and first sign on the fourth row). Hex 300 is 768 in decimal, and divided by 16 (bytes per tile) gives us position 48. However, the most important detail is that it’s there, and perhaps I should have taken this step before I wrote code to change the byte order of an entire file but I was convinced that it would work so I didn’t even think about verifying it beforehand.</p>
+
+        <p>Doing this final check was still a good thing because it proves that the idea and method is working and seems correct. And after testing this method on another game it actually feels like this might be the best method as I now have all tools needed to easily dump, crop and transform hex data into a character file as seen in the <em>Tile Viewer 2</em>.</p>
+
+        <h2>Ending words</h2>
+
+        <p>Overall, the tests came out as desired. I now have a system I can implement in some other projects but before going all in, it would probably be a good idea to optimize it. In this first version of this “text system” I am doing a bit check on every pixel for every character when printing text - even if letters are reused. It makes for a flexible system where I can change palette whenever I need, but in a target application I would probably not do it very often. Perhaps it would be better to make a character map and change it when needed. One would need to decide how flexible it has to be, for example if it's required to be able to change colors within the same block of text.</p>
+
+        <p>The method to extract character/tile data from Video RAM using <em>Mesen-S</em> can probably be used with most other SNES games as well, and by doing so getting around any compressed data obstacles. I have at this time not checked into other games but can imagine it’s not a unique method to <em>ActRaiser</em> and other <em>Quintet</em> games, however the compression method will surely be different.</p>
+
+        <p>When it comes to compression, it’s of course useful to know what compression type is used but sometimes more information is needed to decode the data. In this case I had no idea of the LZSS “settings” which would have made decompressing the data difficult, but even if I had known the look ahead and sliding window size I would probably not have tried to create a decoder myself. Thanks to the python scripts I found, I now know the sliding window size (which is the “history”) is 256 bytes long, and the look ahead window is 16 bytes. So I might look further into the LZSS algorithm, but for this project it’s not needed and all questions from when I started are now answered.</p>
+
+        <p>This concludes this 3-part atricle/post series but as I have a system that works it would be logical to implement this system in some project, making use of all work I put into this investigation. Thanks for reading!</p>
     </section>
 </article>
 
