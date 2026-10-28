@@ -20,6 +20,15 @@ h1 {
     margin-bottom: 8px;
     line-height: 1.2;
 }
+h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2b6cb0;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #edf2f7;
+    padding-bottom: 0.3rem;
+}
 .metadata {
     font-size: 0.9rem;
     color: #718096;
@@ -27,6 +36,13 @@ h1 {
     border-bottom: 1px solid #e2e8f0;
     padding-bottom: 16px;
 }
+        .metadata a {
+            color: #3182ce;
+            text-decoration: none;
+        }
+        .metadata a:hover {
+            text-decoration: underline;
+        }
 .tags {
     margin-top: 8px;
 }
@@ -86,4 +102,26 @@ img {
     height: auto;
     display: block;
     margin: 0 auto;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border-radius: 6px;
+    overflow: hidden;
+}
+th, td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+th {
+    background-color: #edf2f7;
+    color: #2d3748;
+    font-weight: 600;
+}
+tr:last-child td {
+    border-bottom: none;
 }
