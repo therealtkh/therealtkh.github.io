@@ -102,6 +102,160 @@
 
         <p>However, the program and methods used were not designed for 2 bpp so it was unclear how much work it would be to upgrade to a new system. In the end, the idea of a flexible and more colorful font was too intriguing and it was time to expand the scope and double the bit depth - growing the <em>ActRaiser</em> CHR file to a massive 1088 bytes (at the time of testing)!</p>
 
+                <h2>The Second Test and Tile Editor 2</h2>
+        
+        <p>After a lot of work, a new program and an ActRaiser 2bpp CHR file was created. By investigating the tiles in the emulator Mesen-S, which has several interesting developer tools included, I could confirm that the characters are indeed using 2 bpp, which means a total of four colors.</p>
+
+        <div class="img-container">
+            <img src="2_01_ActRaiser_Colors.png" alt="ActRaiser Tiles Alternative Palette" />
+        </div>
+
+        <p>On a black background it’s impossible to distinguish transparent and black tiles, but by saving the character map to a file using a different palette it was possible to separate black and transparent pixels.</p>
+
+        <div class="img-container">
+            <img src="2_02_TileEditor2.png" alt="Tile Editor 2 with ActRaiser Font" />
+        </div>
+
+        <p>The new version basically works in the same way and is in the image above showing two bitplanes next to each other as well as the resulting combined character to the right.</p>
+
+        <div class="img-container">
+            <img src="2_03_ActRaiser_2bpp.png" alt="ActRaiser CHR file in hex viewer" />
+        </div>
+
+        <p>The character file looks very similar, and the byte values from the editor example above can be found in the file when looking in an hex editor (marked in blue). Looking at character addressing in the hex editor, it kind of makes sense to use two bit planes per tile (or character).</p>
+
+        <p>With a new system defined, and a new character map file in place it was time to prepare a proper test.</p>
+
+        <div class="img-container">
+            <img src="2_04_ActRaiser_Text_Test_1.png" alt="ActRaiser Text Test 1" />
+        </div>
+
+        <p>The first test was performed with the same colors as the game use, and it looked great! But with black background, the shadow is not visible. Thanks to palette presets it’s easy to change to other combinations, and also testing different background colors.</p>
+
+        <div class="img-container">
+            <img src="2_05_ActRaiser_Text_Test_2.png" alt="ActRaiser Text Test 2" />
+        </div>
+
+        <p>However, care should be taken to what background color or graphics is used behind text.</p>
+
+        <div class="img-container">
+            <img src="2_06_ActRaiser_Text_Test_3.png" alt="ActRaiser Text Test 3" />
+        </div>
+
+        <p>By modifying the palette, which could be done at any time, the shadow color could be exchanged to another (shadow) color or even transparent (to skip it) if it would make for a better visual appearance.</p>
+
+        <p>The three palette examples above, using three different background colors, are summarized in the table below.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Palette</th>
+                    <th>Color 00</th>
+                    <th>Color 01</th>
+                    <th>Color 10</th>
+                    <th>Color 11</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Palette 0</td>
+                    <td>Transparent</td>
+                    <td>Black</td>
+                    <td>Light Blue</td>
+                    <td>White</td>
+                </tr>
+                <tr>
+                    <td>Palette 1</td>
+                    <td>Transparent</td>
+                    <td>Black</td>
+                    <td>Gold</td>
+                    <td>White</td>
+                </tr>
+                <tr>
+                    <td>Palette 2</td>
+                    <td>Transparent</td>
+                    <td>Transparent</td>
+                    <td>Gold</td>
+                    <td>Gold</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>The new system is more flexible and can mimic the original 1 bpp style if desired. I have a feeling that I won’t go back to the old system as the 2 bpp system works perfectly.</p>
+
+        <h2>Updated method to extract data from the ActRaiser ROM</h2>
+
+        <p>While getting raw data extracted from NES ROMs was easy, the SNES extraction was a completely different story. When I didn’t get any match from searching in the ActRaiser ROM file I did some research and found out that data is stored in compressed form. And later I actually found a text saying that the data was compressed using the LZSS algorithm.</p>
+
+        <p>Earlier I mentioned the developer/debugging tools in Mesen-S but at that time I only used them to save graphics to file. I knew it was also possible to look at Video RAM, and I was hoping to find the uncompressed character data there instead - which would be the next best thing after directly from the ROM. However, there was no match when searching so I gave up on this track and drew everything manually. I had however missed out on an important difference between NES and SNES graphics, and also didn’t notice the leads.</p>
+
+        <p>After some questions in the Retro Game Mechanics Explained Discord server I learned from Kagamiin~ that SNES tiles using two bit planes are not stored in the same way as NES (where bit planes are “split”, or placed “after each other”). The big difference is that SNES tiles are combined or “spliced” which means the row’s byte values for first and second bit planes are consecutive. A few screenshots are needed to fully explain this.</p>
+
+        <div class="img-container">
+            <img src="2_07_Mesen_TileViewer.png" alt="Mesen Tile Viewer" />
+        </div>
+
+        <p>Using the Tile Viewer in Mesen-S when being on the same name entry screen as before we can see in the bottom right corner that the character ‘0’ is located at Tile Address $A300. This is the address in Video RAM.</p>
+
+        <div class="img-container">
+            <img src="2_08_Mesen_VideoRAM.png" alt="Mesen Memory Video RAM" />
+        </div>
+
+        <p>In the Video RAM, at that address we can copy the 16 bytes corresponding to the character.</p>
+
+        <div class="img-container">
+            <img src="2_09_Tile_Transformer.png" alt="Tile Transformer" />
+        </div>
+
+        <p>I wrote an extremely simple tool to take a string of 16 values and split them into two strings with 8 values each, split on every second value. These two strings of 8 hex values in each could then be copied into the Tile Editor 2.</p>
+
+        <div class="img-container">
+            <img src="2_10_Tile_Editor_2_True.png" alt="Tile Editor 2 True Data" />
+        </div>
+
+        <p>And it was a perfect match to draw the ‘0’, even though I had to reverse the plane order to match my system. This was the missing piece to the puzzle, and now it was possible to copy each character to the Tile Editor and get a perfect match without any manual drawing! It would of course be possible to do a RAM dump and transform the entire file at once instead.</p>
+
+        <h2>A bit of code</h2>
+
+        <p>Most of the functionality is quite basic but I feel that I can write a few words on the key method to handle the bits in every byte (which is a row in a tile). Some explanations below the code, and this is the function to draw the combined image (tile) with up to four colors. The same method is used for other fields in the application but in variations depending on what field is updated (like single planes or the "character maps").</p>
+
+        <pre><code>byte[] tile1 = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+byte[] tile2 = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+
+Brush[] selectedPalette = new Brush[] { Brushes.Transparent, Brushes.Black, Brushes.LightBlue, Brushes.White };
+
+private void UpdateCombinedField()
+{
+    Graphics g = Graphics.FromImage(bmp_tile3);
+    g.Clear(bgColors[cb_bgColor.SelectedIndex]);
+    Brush b;
+    for (int y = 0; y &lt; tile1.Length; y++)
+    {
+        int var1 = tile1[y];
+        int var2 = tile2[y];
+        for (int x = 7; x &gt;= 0; x--)
+        {
+            int color = 0;
+            if ((1 &amp; var1) &gt; 0)
+            {
+                color += 2;
+            }
+            if ((1 &amp; var2) &gt; 0)
+            {
+                color++;
+            }
+            b = selectedPalette[color];
+            g.FillRectangle(b, x * 32, y * 32, 32, 32);
+            var1 &gt;&gt;= 1;
+            var2 &gt;&gt;= 1;
+        }
+    }
+    pb_combinedTiles.Image = bmp_tile3;
+}</code></pre>
+
+        <p>For every pixel in the 8x8 tile, color is picked by looking through the two bit planes called tile1 and tile2. They are simply byte arrays with eight bytes in each and they are obviously updated with new values (when clicking on a tile in the character map) before running this function. We also have a list of brushes, and which one to use for a given pixel is decided in the inner for-loop by looking at the same pixel in both bit planes.</p>
+
+        <p>The (1 &amp; var) checks if the lowest bit is set (1), adding 1 and/or 2 to the color picker depending on value in each bit plane. The lowest bit is on the rightmost side and that's the reason for starting with x = 7. This gives a color value from 0 to 3, the pixel is then drawn with the corresponding brush. After this, the tile byte is shifted one step right and the next pixel on the row is checked and drawn - to the left of the previous pixel. This is repeated for each bit and each byte which means that the double for-loops will run a total of 64 times (and check both planes each time). Simple, right?</p>
     </section>
 </article>
 
