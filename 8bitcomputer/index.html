@@ -578,14 +578,14 @@
     <img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
 </div>
 
-<p>The columns &ldquo;upper&rdquo; and &ldquo;lower&rdquo; are automatically created from the &ldquo;CMD/VAL&rdquo; and &ldquo;Param.&rdquo; Columns. The code is written in the light green columns, and the darker green column is the finished code to copy.</p>
+<p>The columns "upper" and "lower" are automatically created from the &ldquo;CMD/VAL&rdquo; and &ldquo;Param.&rdquo; Columns. The code is written in the light green columns, and the darker green column is the finished code to copy.</p>
 <p>By half-smart operations I mean that the automation will create a finished code in hex values and can handle all commands in a proper way, but it&rsquo;s not smart enough to detect errors, such as too large values or incorrect commands.</p>
 <p>I think the code in the example is self-explanatory if comments are read from top to bottom (because this code will only run once). It will simply calculate 28 + 14 - 10 and output the result (32) on the display. The connection from code to the hex values in RAM to instructions in the Control ROM is perhaps not crystal clear, but possible to identify with knowledge about the computer&rsquo;s architecture.</p>
 <p>In the Excel sheet, there are only three key cell operations to transform a command with parameter to a hex value. This can be done in different ways, but just for the sake of documentation they are listed here:</p>
 <p>Upper nibble (in binary):</p>
-<p style="font-family:Consolas">&nbsp =IFERROR(VLOOKUP(C26; $B$3:$C$18; 2; FALSE); IF(HEX2DEC(C26)&gt;15; DEC2BIN(BITRSHIFT(HEX2DEC(C26); 4); 4); "0000"))</p>
+	<pre><code>=IFERROR(VLOOKUP(C26; $B$3:$C$18; 2; FALSE); IF(HEX2DEC(C26)&gt;15; DEC2BIN(BITRSHIFT(HEX2DEC(C26); 4); 4); "0000"))</code></pre>
 <p>Lower nibble (in binary):</p>
-<p style="font-family:Consolas">&nbsp =IF(ISNA(VLOOKUP(C26; $B$3:$C$18; 2; FALSE)); DEC2BIN(BITAND(HEX2DEC(C26); 15); 4); HEX2BIN(D26; 4))</p>
+	<pre><code>=IF(ISNA(VLOOKUP(C26; $B$3:$C$18; 2; FALSE)); DEC2BIN(BITAND(HEX2DEC(C26); 15); 4); HEX2BIN(D26; 4))</code></pre>
 <p>Finished byte (in hex):</p>
 <p style="font-family:Consolas">&nbsp =BIN2HEX(F26) &amp; BIN2HEX(G26)</p>
 <p>&nbsp;</p>
