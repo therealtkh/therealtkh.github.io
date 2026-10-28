@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Tilesets in NES / SNES Games</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<article>
+    <header>
+        <h1>Exploring Character (Text) Tilesets in NES / SNES Games</h1>
+        <div class="metadata">
+            <span>Published on: April 6, 2023</span>
+        </div>
+    </header>
+
+    <section class="content">
+        <h2>Introduction</h2>
+        <p>The purpose of these posts is partly notes for myself, but also a way to show what I have done and how the system works. In no way would I say that this is the best or even a good way to handle tile-based text, I was simply inspired by the 8x8 font system used in various NES/SNES games and was curious of how to implement such a system myself.</p>
+        <p>Main focus will be on functionality and examples, not on code.</p>
+
+        <h2>Inspiration</h2>
+        <p>Let’s start by looking at the password screens in the NES games <em>Metroid</em> and <em>Kid Icarus</em>.</p>
+
+        <div class="img-container">
+            <img src="Metroid_Password_Screen.png" alt="Metroid Password Screen" />
+        </div>
+
+        <div class="img-container">
+            <img src="KidIcarus_Password_Screen.png" alt="Kid Icarus Password Screen" />
+        </div>
+
+        <p>Slightly different styles, but both fonts are using 8x8 tiles with 7x7 characters. The blank row is at the bottom and the blank column is to the right in the tile. This means that characters can be stacked next to each other with built-in spacing for text.</p>
+        <p>However, these fonts are not really made for long texts and only upper case text looks somewhat decent for short sentences.</p>
+
+        <h2>Tile Editor 1 and the First test</h2>
+        <p>I wrote a small program to visualize characters in the simplest way. If a tile is 8x8 pixels it can be represented with 8 bytes with two colors (typically black and white).</p>
+
+        <div class="img-container">
+            <img src="TileEditor1.png" alt="Tile Editor 1 With Metroid Characters" />
+        </div>
+
+        <p>All text boxes to the left represent the rows and the box up top has all values combined to make it easy to copy all values at once and also paste a string of 8 hex values and update the entire field at once. The character map is saved to and loaded from a character file (from now on called CHR file).</p>
+
+        <div class="img-container">
+            <img src="Metroid_1bbp_hex.png" alt="Metroid 1bpp hex" />
+        </div>
+
+        <p>Looking at the CHR file from the example above shows the same combination of hex values, marked in blue. Note that all characters are packed as tightly as possible with only eight bytes per character and no additional information.</p>
+
+        <p>CHR files were created for both <em>Metroid</em> and <em>Kid Icarus</em> fonts. Initially by drawing the numbers by hand by looking at the password screens and copying pixel by pixel, but the method/process is very time consuming and was only used for the numbers and a few letters. Add to this the risk of making mistakes when drawing manually.</p>
+
+        <p>If the <em>Metroid</em> ROM is opened in a hex editor, the same byte combination can be found by doing a quick search. One text string could be randomly matched but if several “characters strings” after each other match it’s for sure the character set.</p>
+
+        <div class="img-container">
+            <img src="Metroid_ROM.png" alt="Metroid ROM" />
+        </div>
+
+        <p>Ten numbers (0-9) with the matching values and after that at 0x1B570, starting with “38 6C”, is the letter ‘A’ and so on. So instead of drawing characters manually, the eight bytes can be copied directly into the tile editor. Much faster and no risk of drawing a character wrong.</p>
+
+        <p>It can be seen that every character in the ROM file consists of 16 bytes which means two bits per pixel (2 bpp) - giving a possibility of four different colors for a tile. The colors are decided from a palette in larger groups but the details regarding palettes are better explained by others, and it’s not a system I would need or like to follow for my test program. However, the CHR files have only 1 bpp (so far) so the first tests would be with only black and white.</p>
+
+        <p>I moved on to a new test program to draw strings with the font from a character file.</p>
+
+        <div class="img-container">
+            <img src="Metroid_Text_Test.png" alt="Metroid Text Test" />
+        </div>
+
+        <p>The first test with the <em>Metroid</em> font really showed that it was not meant to be used for texts. Capital letters look fine but it would be annoying to be limited to only those.</p>
+
+        <div class="img-container">
+            <img src="KidIcarus_Text_Test.png" alt="Kid Icarus Text Test" />
+        </div>
+
+        <p>The <em>Kid Icarus</em> font was better, but the weak point is again the lower case letters.</p>
+
+        <p>For some reason I looked at the font for one of my favorite games: <em>ActRaiser</em> (SNES). It has lots of text and is not only using capitals. The name entry screen has a similar good summary as the other password screens:</p>
+
+        <div class="img-container">
+            <img src="ActRaiser_Name_Screen.png" alt="ActRaiser Name Screen" />
+        </div>
+
+        <p>The screen even has an example of a text with both upper and lower case letters and I liked how it looked (perhaps somewhat biased) and decided to create a CHR file for this game as well. It wasn’t as simple as with the other games though.</p>
+
+        <p>As can be seen in the image, at least three colors are used for a character: white, light blue and the rest is black. But SNES graphics support transparency as a color for graphics (I am not sure of NES games), so for the text they could use either black or transparency. Regardless, I knew the font would make use of both bit planes.</p>
+
+        <div class="img-container">
+            <img src="TileEditor1_ActRaiser.png" alt="ActRaiser in Tile Editor 1" />
+        </div>
+
+        <p>After some work, a new character file was drawn (manually) as the “ROM value search” method was not applicable for some reason. More on this later. For this CHR file, white would represent both white and light blue and use black for the rest..</p>
+
+        <div class="img-container">
+            <img src="ActRaiser_Text_Test.png" alt="ActRaiser Text Test" />
+        </div>
+
+        <p>The text looks much better with this font and it really shows that it was made with readability in mind. And if using text on black background, this would work perfectly for my purpose! The work could actually stop here so I could move on to implementing the system in the target application, but I didn’t.</p>
+
+        <p>Again, I will not even try to go into detail, but from my understanding the graphics used for the text in <em>ActRaiser</em> is at least 2 bpp, and because it can use transparency it is more flexible and can be used on almost any background and not only black like in this first test. It would of course be possible to have other colors than black and white, and even transparency to overlay text onto something else, but the system is still quite limited.</p>
+
+        <p>However, the program and methods used were not designed for 2 bpp so it was unclear how much work it would be to upgrade to a new system. In the end, the idea of a flexible and more colorful font was too intriguing and it was time to expand the scope and double the bit depth - growing the <em>ActRaiser</em> CHR file to a massive 1088 bytes (at the time of testing)!</p>
+
+    </section>
+</article>
+
+</body>
+</html>
