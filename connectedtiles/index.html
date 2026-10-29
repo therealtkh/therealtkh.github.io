@@ -4,21 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connected Tiles</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
 
 <article>
     <header>
         <h1>Connected Tiles</h1>
+		<div class="metadata">
+            <span>Jonas Ohlsson, 2023</span>
+        </div>
     </header>
 
     <section class="content">
+		<h2>1. Introduction</h2>
+		
         <p>After watching a programming video on <em>Wave Function Collapse</em> (<em>WFC</em> from now on) I got inspired to play around with connected tiles. I didn't want a direct copy, so I made a challenge of my own with randomness and connected tiles. And as far as I understood the concept of <em>WFC</em>, it shall contain a bit more than what I did, but the basic idea is similar (or even the same?), but it might be called somehting else.</p>
 
         <div class="img-container">
             <img src="CT_01-final.png" alt="End result">
         </div>
+		
+		<h2>2. Basic Functionality</h2>
 
         <p>I started with deciding on what tileset to use. I made one myself and it only contains a black line (the connecting one) on a white background. The tiles are 16x16 pixels and to save a bit of time on programming, I included all the rotated parts as well. In a future version, this set should only contain six tiles. To clearer indicate a "start/stop" tile I made it into a blob. It makes the tiles look more like a circuit board than a road system, but either one works for me. (I've seen a few examples of <em>WFC</em> using circuit board tilesets.)</p>
 
@@ -64,6 +71,8 @@ possibleTiles = (from connections in tiles
         <div class="img-container">
             <img src="CT_03-equal.png" alt="Result with equal weight">
         </div>
+
+		<h2>3. Weights and Probability</h2>
 
         <p>A very simple solution (or addon) is to add weigths to tiles. So I included one more value in the <em>Tile</em> class:</p>
 
@@ -138,6 +147,8 @@ return possibleTiles[range[selected]];     // ...to get the weighted result</cod
         <div class="img-container">
             <img src="CT_07-40-30.png" alt="Final result larger">
         </div>
+		
+		<h2>4. Ending Words</h2>
 
         <p>Before we end I should mention the seed (seen in the title in each screenshot). It's not of importance for this test project, but I like the idea of including seeds into the projects using a random number generator. It makes it easier to go back in case of problems, or to share an interesting pattern.</p>
 
