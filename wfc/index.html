@@ -4,23 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wave Function Collapse</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
 
 <article>
     <header>
         <h1>Wave Function Collapse</h1>
+		<div class="metadata">
+            <span>Jonas Ohlsson, 2023</span>
+        </div>
     </header>
 
     <section class="content">
+		<h2>1. Introduction</h2>
+	
         <p>In my previous article, I described a Wave Function Collapse (WFC from now on) inspired project where I explored the basic idea of randomness with restrictions, now it’s time for the real thing. In this article I’ll show the method I ended up with. In case you haven’t read the previous article, or if you read it a long time ago, I would suggest checking it first, as this project is a direct continuation of it and many parts are the same.</p>
 
         <div class="img-container">
             <img src="WFC_gif_new_tileset.gif" alt="Final Behavior">
         </div>
 
-        <p>What a spoiler, that was the final result! So let’s take a big step back and take things in order, beginning where we left off in the previous post. First, I wanted to make the tileset (graphics) more compact and reduced it to one of each type (compare with previous post), so I implemented a method to rotate a tile and all its properties. Remember for later that this tileset can never fail to fill the board, but this is the new tileset:</p>
+        <p>What a spoiler, that was the final result! So let’s take a big step back and take things in order, beginning where we left off in the previous post.</p>
+		
+		<h2>2. Flexible Tiles</h2>
+		
+		<p>First, I wanted to make the tileset (graphics) more compact and reduced it to one of each type (compare with previous post), so I implemented a method to rotate a tile and all its properties. Remember for later that this tileset can never fail to fill the board, but this is the new tileset:</p>
 
         <div class="img-container">
             <img src="WFC_01-tilesnew-5.png" alt="New Tileset">
@@ -72,6 +81,8 @@ List&lt;Tile&gt; possibleTiles = new List&lt;Tile&gt;();
     select connections).ToList();</code></pre>
 
         <p>After creating a selection of tiles, I used the same weighting method as described in my previous post on this subject and the resulting board is ended up exactly the same as before (which is what we wanted to see), so with the new connection method working it was time to implement the collapse function. It will start the fill process in the mouse click position and then check all directions to calculate the new <em>Entropy</em> for the surrounding tiles before deciding where to place next tile.</p>
+		
+		<h2>3. Algorithm Breakdown</h2>
 
         <p>I kept the same wording as was used in the project that inspired me, but instead of <em>Entropy</em> I could as well have called it <em>Possibilities</em> or something like that. This value is used when deciding which position is next to be evaluated. The flow looks like this after selecting a position:</p>
 
@@ -155,7 +166,11 @@ if (y != 0 &amp;&amp; field[y - 1, x].Collapsed == false)   // Add above tile if
 }
 return null; // This will happen when the last tile has been placed and workingTiles is empty</code></pre>
 
-        <p>And with that piece of code we are pretty much done! But the tileset we have used up until now is not very exciting, it’s time to take the project to the next level and use a more interesting tileset. I will use the same one that was used in the project I was inspired by. I added a few more though, partly to make it more “complete” but also because I kept running into impossible pattern combinations and in turn had problems finishing a full, large sized board.</p>
+        <p>And with that piece of code we are pretty much done! But the tileset we have used up until now is not very exciting, it’s time to take the project to the next level and use a more interesting tileset.</p>
+
+		<h2>4. New Graphics</h2>
+
+		<p>I will use the same one that was used in the project I was inspired by. I added a few more though, partly to make it more “complete” but also because I kept running into impossible pattern combinations and in turn had problems finishing a full, large sized board.</p>
 
         <div class="img-container">
             <img src="WFC_02-circuit-3.png" alt="New Tileset">
@@ -195,6 +210,8 @@ tiles.Add(tmpTile.Rotate(1));</code></pre>
 
         <p>As mentioned before, this tileset will not always find a solution, and this scenario can be handled in various ways. I added a flag which is set in case a “failed” tile has been placed. Then it’s easy to loop until a solution is found. If using a loop, you shouldn’t use a seed as next try would give exactly the same result. In the gif in the beginning I actually used a fixed seed.</p>
 
+		<h2>5. Ending Words</h2>
+		
         <p>With all this functionality I actually felt satisfied with this project, now you can look at the gif at the top and hopefully understand what’s going on! There are of course many more things to try, it would for example be really fun to create randomized maps or cities! Those would have to come with more rules, and probably also backtracking in case of impossible solutions. I guess we’ll see if I explore those topics in the future.</p>
     </section>
 </article>
