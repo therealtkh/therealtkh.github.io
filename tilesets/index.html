@@ -19,7 +19,7 @@
     <section class="content">
         <h2>1. Introduction</h2>
 		
-        <p>The purpose of these posts is partly notes for myself, but also a way to show what I have done and how the system works. In no way would I say that this is the best or even a good way to handle tile-based text, I was simply inspired by the 8x8 font system used in various NES/SNES games and was curious of how to implement such a system myself.</p>
+        <p>The purpose of this article is partly notes for myself, but also a way to show what I have done and how the system works. In no way would I say that this is the best or even a good way to handle tile-based text, I was simply inspired by the 8x8 font system used in various NES/SNES games and was curious of how to implement such a system myself.</p>
         <p>Main focus will be on functionality and examples, not on code.</p>
 
         <h2>2. Inspiration</h2>
@@ -358,7 +358,7 @@ FC: no differences encountered</code></pre>
 
         <p>When it comes to compression, it’s of course useful to know what compression type is used but sometimes more information is needed to decode the data. In this case I had no idea of the LZSS “settings” which would have made decompressing the data difficult, but even if I had known the look ahead and sliding window size I would probably not have tried to create a decoder myself. Thanks to the python scripts I found, I now know the sliding window size (which is the “history”) is 256 bytes long, and the look ahead window is 16 bytes. So I might look further into the LZSS algorithm, but for this project it’s not needed and all questions from when I started are now answered.</p>
 
-        <p>This concludes this 3-part atricle/post series but as I have a system that works it would be logical to implement this system in some project, making use of all work I put into this investigation. Thanks for reading!</p>
+        <p>This concludes this multi-part exploration (it was initially a three-part article series), but as I have a system that works it would be logical to implement this system in some project, making use of all work I put into this investigation. Thanks for reading!</p>
     </section>
 </article>
 
