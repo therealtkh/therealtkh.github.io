@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Character Tilesets in NES / SNES Games</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
 
@@ -12,16 +12,18 @@
     <header>
         <h1>Exploring Character (Text) Tilesets in NES / SNES Games</h1>
         <div class="metadata">
-            <span>Published on: April 6, 2023</span>
+            <span>Jonas Ohlsson, 2023</span>
         </div>
     </header>
 
     <section class="content">
-        <h2>Introduction</h2>
+        <h2>1. Introduction</h2>
+		
         <p>The purpose of these posts is partly notes for myself, but also a way to show what I have done and how the system works. In no way would I say that this is the best or even a good way to handle tile-based text, I was simply inspired by the 8x8 font system used in various NES/SNES games and was curious of how to implement such a system myself.</p>
         <p>Main focus will be on functionality and examples, not on code.</p>
 
-        <h2>Inspiration</h2>
+        <h2>2. Inspiration</h2>
+		
         <p>Let’s start by looking at the password screens in the NES games <em>Metroid</em> and <em>Kid Icarus</em>.</p>
 
         <div class="img-container">
@@ -35,7 +37,8 @@
         <p>Slightly different styles, but both fonts are using 8x8 tiles with 7x7 characters. The blank row is at the bottom and the blank column is to the right in the tile. This means that characters can be stacked next to each other with built-in spacing for text.</p>
         <p>However, these fonts are not really made for long texts and only upper case text looks somewhat decent for short sentences.</p>
 
-        <h2>Tile Editor 1 and the First test</h2>
+        <h2>3. Tile Editor 1 and the First test</h2>
+		
         <p>I wrote a small program to visualize characters in the simplest way. If a tile is 8x8 pixels it can be represented with 8 bytes with two colors (typically black and white).</p>
 
         <div class="img-container">
@@ -102,7 +105,7 @@
 
         <p>However, the program and methods used were not designed for 2 bpp so it was unclear how much work it would be to upgrade to a new system. In the end, the idea of a flexible and more colorful font was too intriguing and it was time to expand the scope and double the bit depth - growing the <em>ActRaiser</em> CHR file to a massive 1088 bytes (at the time of testing)!</p>
 
-                <h2>The Second Test and Tile Editor 2</h2>
+		<h2>4. The Second Test and Tile Editor 2</h2>
         
         <p>After a lot of work, a new program and an ActRaiser 2bpp CHR file was created. By investigating the tiles in the emulator Mesen-S, which has several interesting developer tools included, I could confirm that the characters are indeed using 2 bpp, which means a total of four colors.</p>
 
@@ -183,7 +186,7 @@
 
         <p>The new system is more flexible and can mimic the original 1 bpp style if desired. I have a feeling that I won’t go back to the old system as the 2 bpp system works perfectly.</p>
 
-        <h2>Updated method to extract data from the ActRaiser ROM</h2>
+        <h2>5. Updated method to extract data from the ActRaiser ROM</h2>
 
         <p>While getting raw data extracted from NES ROMs was easy, the SNES extraction was a completely different story. When I didn’t get any match from searching in the ActRaiser ROM file I did some research and found out that data is stored in compressed form. And later I actually found a text saying that the data was compressed using the LZSS algorithm.</p>
 
@@ -215,7 +218,7 @@
 
         <p>And it was a perfect match to draw the ‘0’, even though I had to reverse the plane order to match my system. This was the missing piece to the puzzle, and now it was possible to copy each character to the Tile Editor and get a perfect match without any manual drawing! It would of course be possible to do a RAM dump and transform the entire file at once instead.</p>
 
-        <h2>A bit of code</h2>
+        <h2>6. A bit of code</h2>
 
         <p>Most of the functionality is quite basic but I feel that I can write a few words on the key method to handle the bits in every byte (which is a row in a tile). Some explanations below the code, and this is the function to draw the combined image (tile) with up to four colors. The same method is used for other fields in the application but in variations depending on what field is updated (like single planes or the "character maps").</p>
 
@@ -257,7 +260,7 @@ private void UpdateCombinedField()
 
         <p>The (1 &amp; var) checks if the lowest bit is set (1), adding 1 and/or 2 to the color picker depending on value in each bit plane. The lowest bit is on the rightmost side and that's the reason for starting with x = 7. This gives a color value from 0 to 3, the pixel is then drawn with the corresponding brush. After this, the tile byte is shifted one step right and the next pixel on the row is checked and drawn - to the left of the previous pixel. This is repeated for each bit and each byte which means that the double for-loops will run a total of 64 times (and check both planes each time). Simple, right?</p>
     
-    <h2>Proper decompression of tile data for font</h2>
+		<h2>7. Proper decompression of tile data for font</h2>
         
         <p>Even though the “Video RAM” method works perfectly (explained in part two) I was still curious about the LZSS algorithm and looked a bit more into that. Internet searches took me to a forum question regarding this very specific topic (and I hope all external links stays active!):</p>
 
@@ -321,7 +324,7 @@ FC: no differences encountered</code></pre>
 
         <p>Holding Shift will change the “Add” button to “Ins”, as can be seen in the image, which will insert a new “character row” at the marked position. A minor, but interesting, detail is that Japanese characters are all white with no shadows.</p>
 
-        <h2>Video RAM Dump Method</h2>
+        <h2>8. Video RAM Dump Method</h2>
 
         <p>I didn’t at the time, but I could have made a Video RAM dump and looked for a match for characters, so I will show that as well. We can use the address from the <em>Tile Viewer</em> in <em>Mesen-S</em> to find a reference character, let’s use the ‘0’ in address $A300:</p>
 
@@ -347,7 +350,7 @@ FC: no differences encountered</code></pre>
 
         <p>Doing this final check was still a good thing because it proves that the idea and method is working and seems correct. And after testing this method on another game it actually feels like this might be the best method as I now have all tools needed to easily dump, crop and transform hex data into a character file as seen in the <em>Tile Viewer 2</em>.</p>
 
-        <h2>Ending words</h2>
+        <h2>9. Ending words</h2>
 
         <p>Overall, the tests came out as desired. I now have a system I can implement in some other projects but before going all in, it would probably be a good idea to optimize it. In this first version of this “text system” I am doing a bit check on every pixel for every character when printing text - even if letters are reused. It makes for a flexible system where I can change palette whenever I need, but in a target application I would probably not do it very often. Perhaps it would be better to make a character map and change it when needed. One would need to decide how flexible it has to be, for example if it's required to be able to change colors within the same block of text.</p>
 
