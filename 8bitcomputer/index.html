@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>8-bit Computer Simulation</title>
-	<link rel="stylesheet" href="../styles.css">
+	<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -38,18 +38,18 @@
 		
 		<p>Let's begin with a big screenshot of the entire design.</p>
 		
-		<img class="thumbnail" src="image002.png" data-high-res="image001-2.png" style="cursor: pointer;" alt="Simulation overview">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image002.png" data-high-res="image001-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>It looks like a big mess, I know. All 7-segment displays except for the three in the bottom right corner were used for development purposes and could be removed. But instead of doing that, let's look at the design in a block diagram instead - with the same positions for all different parts, excluding debug features.</p>
 		
-		<img class="thumbnail" src="image004.png" data-high-res="image003-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image004.png" data-high-res="image003-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>Most blocks also have Reset and Clock connected to them, and the Control ROM outputs 16 control signals connected to different blocks, neither shown in the diagram. All this will be described in more detail later, but first a quick overview of what the different blocks do. The thick vertical line in the middle is the common 8-bit bus, it is used for both addressing and data - sometimes both at the same time (4 bits each).</p>
@@ -96,10 +96,10 @@
 		<p><strong>Clock</strong>
 		<br>If using metaphors, the clock could be called the heart of the computer as it is essential to almost every block, and they will not function without it.</p>
 		
-		<img class="thumbnail" src="image006.png" data-high-res="image005-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image006.png" data-high-res="image005-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>The clock block has a developer friendly control scheme that provides a way to switch between the automatic clock [CLK_IN] and a manual mode [MAN_CLK]. This could have been reduced as the simulation can step the clock manually, but if this were built in real life such a feature would have been nice to have. This block has one control signal:</p>
@@ -108,10 +108,10 @@
 			<li>HLT [CTRL 15], Halt Signal.</li>
 		</ul>
 		
-		<img class="thumbnail" src="image008.png" data-high-res="image007-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image008.png" data-high-res="image007-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>The bottom input will with a high signal disable the clock and instantly halt the computer. The signal [MAIN_CLK] is connected to almost every block in the computer.</p>
@@ -125,18 +125,18 @@
 			<li>RO - [CTRL 12], RAM Output. If held high, the contents of the currently set RAM address will be output on the common bus. Not clock triggered.</li>
 		</ul>
 		
-		<img class="thumbnail" src="image010.png" data-high-res="image009-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image010.png" data-high-res="image009-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>The top left part is used to load RAM manually and the lines going left off screen are used when loading RAM automatically from the RAM Loader. Bottom inputs are the clock and reset signals. Bus connection is drawn as input on left side and the output on the right side of the symbol.</p>
 		
-		<img class="thumbnail" src="image012.png" data-high-res="image011-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image012.png" data-high-res="image011-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>In the sub circuit bottom left corner we can see that the high nibble from bus input is not used, so the address register is defined as only 4 bits which matches the RAM address input. The MUX and its control signals are used for the manual or automatic loading sequence as explained before. Outputs on the right side will show current address and value in it, but the true bus output must be turned on by the control signal.</p>
@@ -146,20 +146,20 @@
 		<p><strong>ROM to RAM Loader</strong>
 		<br>Actually not an important part of the computer, but we should cover this block as it's a common feature in older computers and it made running different programs much easier once the assembler was finished and it was possible to copy a program from Excel directly into the ROM.</p>
 		
-		<img class="thumbnail" src="image014.png" data-high-res="image013-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image014.png" data-high-res="image013-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>The bottom right part has already been covered; it's the address input to RAM. Up top is the manual input of data to the bus; it was only used in the beginning when I had to manually program the computer RAM one byte at a time by flipping the address and data switches with control signals and clock. Now, this is almost automated: starting from a reset computer, one must first activate the automatic loader and simply run the computer for 16 clock cycles, then turn the auto load signal off and the computer is ready to be put in run state.</p>
 		
 		<p>I guess this part could have been automated a bit more with a counter that turns the automatic loader off after 16 cycles and puts the computer into run mode. However, this is still not an important part of the computer design, so I decided to leave it out and maybe revisit the idea in a future project.</p>
 		
-		<img class="thumbnail" src="image016.png" data-high-res="image015-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image016.png" data-high-res="image015-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>This ROM, or cartridge if you will, is loaded with a full program. This is easy to do from the assembler I wrote in Excel, as all commands will be transformed from text and numbers to 16 hex values that can be copied directly into the ROM block and saved in the project. The 4-bit counter will count from 0 to 15 and is simply used as the address to both ROM and RAM so the data ends up in correct position.</p>
@@ -177,28 +177,28 @@
 			<li>CO - [CTRL 1], Counter Out. Output the stored value to the common bus. Not clock triggered.</li>
 		</ul>
 		
-		<img class="thumbnail" src="image018.png" data-high-res="image017-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image018.png" data-high-res="image017-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>Clock and reset inputs from bottom, debug value to the right and bus inputs connected to the common bus below. The counter block looks like this:</p>
 		
-		<img class="thumbnail" src="image020.png" data-high-res="image019-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image020.png" data-high-res="image019-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>This is quite straightforward, and this simple design gives us all features described before. In every command this computer has, the first step is to read out the counter value and place it in the memory address register. During next step in an instruction, along with other actions, the program counter will increase value by one.</p>
 		
 		<p>The observant reader noticed that there is one more block in the first image. It was a late addition to the design which is why it looks a bit squeezed between control bus and the counter block. The functionality actually belongs to the Flag Control and is used during conditional jumps.</p>
 		
-		<img class="thumbnail" src="image022.png" data-high-res="image021-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image022.png" data-high-res="image021-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>The upper in-out line is the default behaviour of a regular unconditional jump command - simply setting a new value to the program counter. The conditional jump command will only set a new program counter value if the corresponding flag is set. These inputs come from the Flag control block, and we'll cover them later.</p>
@@ -211,26 +211,26 @@
 			<li>AO - [CTRL 8], A register out. If held high, the contents of the currently set RAM address will be output on the common bus. Not clock triggered.</li>
 		</ul>
 		
-		<img class="thumbnail" src="image024.png" data-high-res="image023-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image024.png" data-high-res="image023-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>An important detail is that the upper output (where the display is connected - showing the current register value): it is always connected to the ALU, without control signal. The lower output is connected to the bus and needs to be activated.</p>
 		
-		<img class="thumbnail" src="image026.png" data-high-res="image025-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image026.png" data-high-res="image025-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>The sub circuit has an 8-bit register that works just like the registers do in the other blocks, and this circuit is used in several places in the computer.</p>
 		
-		<img class="thumbnail" src="image028.png" data-high-res="image027-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image028.png" data-high-res="image027-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>The implementation of the B register is almost the same but note that there is only one control signal:</p>
@@ -249,10 +249,10 @@
 			<li>EO - [CTRL 7], Sum Output. When held high the value in the ALU will be output to the common bus.</li>
 		</ul>
 		
-		<img class="thumbnail" src="image030.png" data-high-res="image029-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image030.png" data-high-res="image029-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>There are two flag outputs from the ALU:</p>
@@ -262,10 +262,10 @@
 			<li>CF [FLG 1], Carry Flag. Output is high if the operation carries over 255 or below 0.</li>
 		</ul>
 		
-		<img class="thumbnail" src="image032.png" data-high-res="image031-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image032.png" data-high-res="image031-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>The ALU is using an adder circuit which will output the sum and a carry bit if the addition overflows (which means that the value loops around). It also has a carry input which can be used to connect several adders together. In this design, the carry input is used to perform a subtraction instead. If set high the XOR gates flips the B register value and together with the extra carry bit the result is a subtraction instead of addition and therefore means that we're adding 2's complement of the B register - a common method used to represent signed integers.</p>
@@ -282,10 +282,10 @@
 			<li>IO - [CTRL 11], Instruction register out. If held high, the lower nibble in the register will be output on the common bus. Not clock triggered. The lower nibble can contain a command parameter, for example a memory address to use within the command. The higher nibble is passed on to the control ROM until the register is updated with a new instruction value.</li>
 		</ul>
 		
-		<img class="thumbnail" src="image034.png" data-high-res="image033-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image034.png" data-high-res="image033-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>As seen in the image, four bits goes to the right (to the bus, output controlled by IO) and the stored value is always sent down to the Control ROM (only the high nibble is used, but it's not shown in this view). In the beginning of every command, a new command from RAM will be sent to the Instruction Register and will be executed for the rest of the instruction cycle.</p>
@@ -295,18 +295,18 @@
 		
 		<p>An example will make this clearer: let's take the command LDA - Load A register (with a value from RAM). It has the instruction code 0001 and this will be passed as the high nibble from the Instruction Register to the Control ROM during the entire instruction's five steps. The addresser then provides the lower nibble, counting from 0000 up to potentially 1111. The Control ROM would then for every clock cycle output control signals from its stored memory instruction set from addresses 0001 0000 to 0001 1111. As can be seen in the image below, there is a "reset" signal from bit 5 in the decoded value that will reset the addresser and instantly return it to 0000. So, in this design, the Control ROM will only use data from 0001 0000 to 0001 0100 (5 steps).</p>
 		
-		<img class="thumbnail" src="image036.png" data-high-res="image035-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image036.png" data-high-res="image035-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>Another important detail is the [INV_CLK] indicator. The Addresser will act on falling clock edge while almost all other blocks will act on rising edge. The reason is simple: all control signals will be set on falling clock edge, so they are stable and ready on the next rising clock edge.</p>
 		
-		<img class="thumbnail" src="image038.png" data-high-res="image037-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image038.png" data-high-res="image037-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>The left input will invert the clock signal as the counter itself still acts on rising edge. Note the two bottom reset inputs as well, they are used to reset the counter back to zero and the reason for having two inputs is to visually separate different reset functions. The left input is used with the "main" reset signal connected to most blocks, and the right is used for other resets, but they are all doing the same thing.</p>
@@ -318,34 +318,34 @@
 		
 		<p>Because only 11 commands were implemented, and a maximum of 5 steps are used for commands, most of the control ROM is unused. However, the benefit of having a clear structure is worth a lot. We could have used a smaller range for the Addresser, maybe only 3 bits. The maximum length of a command would then be 8 cycles, but we could have used an extra bit to increase the number of commands or make variants of them. I never explored this though, as the Instruction Register is designed to manage up to 16 commands and that was enough for this computer.</p>
 		
-		<img class="thumbnail" src="image040.png" data-high-res="image039-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image040.png" data-high-res="image039-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>Together, these inputs form an address, and the contents will be output as control signals - 16 in total. There is actually nothing fancy in the sub circuit, only two ROM chips. The two ROM chips will receive the same address and the 8-bit data in each are output in parallel and gives the 16 control signals. The interesting part lies in the data stored in the ROMs.</p>
 		
-		<img class="thumbnail" src="image042.png" data-high-res="image041-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image042.png" data-high-res="image041-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>The entire data description is covered further down, but let's take the LDA command used as example before. It is found at address 0001 xxxx (row "10" in both ROMs) and takes up the space of 16 bytes (two rows, matching the Addresser's theoretical 16 steps) up to "1F", although only 4 cycles/bytes are required for LDA. All commands are identical for the first two bytes (40 & 14 in the left ROM, and 04 and 08 in the right). This pattern repeats every 16 bytes and can be seen in the beginning of every second row.</p>
 		
-		<img class="thumbnail" src="table01.png" data-high-res="table01.png" style="cursor: pointer;" width=630px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table01.png" data-high-res="table01.png" width="630">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>This part is called the "fetch cycle" where we fetch the Program Counter value (CO) and place it in the memory Address Register (MI) in the first cycle, and then in the second cycle place the contents from RAM (RO) into the Instruction Register (II) and increase the Program Counter (CE) by 1. The rest of the command is specific for LDA functionality. The command LDA has one nibble (the high, used for Control ROM addressing) to identify the command, and a memory address stored in the low nibble (stays in the Instruction Register). The command is actually saying "copy the contents of RAM address x into Register A", where the address x is what is stored in the low nibble. For example, the data in RAM could be "1F" where the 1 is the LDA identifier and the F is the RAM address where the data is located.</p>
 		
-		<img class="thumbnail" src="table02.png" data-high-res="table02.png" style="cursor: pointer;" width=630px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table02.png" data-high-res="table02.png" width="630">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>Next clock cycle (address 0001 0010) takes the Instruction Register lower nibble (IO), the address in RAM where we have the data, and places that into the memory address (MI). As a final step, the RAM content (RO) at the set address is fed into the A Register (AI). All remaining 12 steps (from 0100 to 1111) are all 0x00 in the ROM so during step 0100 nothing will happen in the computer. The feature where the Addresser is reset after 5 cycles will step in after that, so steps 0101 to 1111 are never executed.</p>
@@ -359,10 +359,10 @@
 		
 		<p>The last addition to the computer design was a conditional jump feature and is built out of two parts. First there is a standard register:</p>
 		
-		<img class="thumbnail" src="image044.png" data-high-res="image043-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image044.png" data-high-res="image043-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton" >&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>Even though the flag register has 8 bits for use, the implementation was completely centred around the jump feature and used only 2 bits. Flags are output from the ALU in case of an overflow or zero condition and are stored with one control signal:</p>
@@ -373,10 +373,10 @@
 		
 		<p>The input to the Control ROM is also connected to a cluster of gates to give a "true" at the correct instruction step - working exactly like the Control ROM. All 16 outputs from the ROM were already used and two more were required for the conditional jumps.</p>
 		
-		<img class="thumbnail" src="image046.png" data-high-res="image045-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image046.png" data-high-res="image045-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>It would have been possible to handle this with another ROM, at least the lower part of the image above. Note the 8 inputs to each OR gate: some are inverted, they correspond to the 0's in the "command address". Here we can see that the first one is 0111 0010 and the other is the command 1000 0010, matching the commands 0111 - JC (Jump if Carry), and 1000 - JZ (Jump if Zero). The lower half is the same on both: 0010, which is the first microinstruction after the fetch cycle. This is the discrete way of doing exactly what the Control ROM is doing but takes up more space.</p>
@@ -385,10 +385,10 @@
 		
 		<p>The conditional jumps work by executing the command, which will have a new RAM address stored in the Instruction Register (as a parameter, the lower nibble). But we only want to jump if the associated flag is set - which will come from the Flag Register. One of the outputs (the upper, leaving to the left) will tell the Conditional Jump block that a conditional jump is being executed. Let's remind ourselves of how it looked:</p>
 		
-		<img class="thumbnail" src="image047.png" data-high-res="image021-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image047.png" data-high-res="image021-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>The control signal(s) will change a regular jump to a conditional jump by being sent through the lower path of the MUX. The AND gate adds the requirement of additional high signal, coming from the command in combination with the corresponding flag. If true, the next clock cycle will store a new address in the counter. Otherwise, the value in the Program Counter will remain.</p>
@@ -396,10 +396,10 @@
 		<p><strong>Output</strong>
 		<br>There are different ways to display data on 7-segment displays. Dedicated drivers, discrete logic or something in between. I went with the last variant, mostly because I wanted to try a ROM style output. For a simulation, it doesn't really matter.</p>
 		
-		<img class="thumbnail" src="image049.png" data-high-res="image048-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image049.png" data-high-res="image048-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>The register that holds the value works exactly like the registers in other places. It can only be written to and has one control signal:</p>
@@ -408,10 +408,10 @@
 			<li>OI - [CTRL 4], Output Input. If held high, the address register will be set on next rising clock edge. Used to save the value so displays will show value until next time we update the display register.</li>
 		</ul>
 		
-		<img class="thumbnail" src="image051.png" data-high-res="image050-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image051.png" data-high-res="image050-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>The actual output operates by splitting the 8-bit value with dividers into hundreds, tens and singles. The first divider has the divider input 64 (which is 100 in decimal) and the second has 0A (which means 10), these results are used as addresses to three identical 16 Byte ROMs. They are prepared with values for 7-segment displays to turn on specific segments based on values 0-15 - corresponding to 0-F. One idea was to be able to switch between decimal and hex display with a single input signal, but this was never implemented as it felt out of scope for this project.</p>
@@ -419,10 +419,10 @@
 		<p><strong>Optimization mode</strong>
 		<br>Another late addition to the computer is not essential for functionality is a form of optimization feature that was mostly added for fun. But it's in the design, so I'll cover it in brief detail for the sake of completeness.</p>
 		
-		<img class="thumbnail" src="image053.png" data-high-res="image052-2.png" style="cursor: pointer;">
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="image053.png" data-high-res="image052-2.png">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>The lower right input comes from the control bus (16 signals), and the feature has a manual activation button. The big NOR gate will give a high signal in case all control signals are low. As mentioned several times before, the addresser will reset after five clock cycles, which means that commands will take five cycles regardless of how many actual steps it requires. This circuit will in case of 16 low signals output a high signal to the OR gate and reset the addresser, effectively ending the command immediately after the final micro instruction. For example, the LDA has only four cycles with instruction, so this optimization would end the command after that - making the command 20% faster. A Jump instruction has only one micro instruction after the fetch cycle, so it would be 40% faster.</p>
@@ -433,20 +433,20 @@
 		
 		<p>In this section, every command will be explained in detail and broken down to show every micro instruction step. This is the current list of all commands:</p>
 		
-		<img class="thumbnail" src="table03.png" data-high-res="table03.png" style="cursor: pointer;" width=630px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table03.png" data-high-res="table03.png" width="630">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>The column <em>Parameter</em> means that the second part (lower nibble) of the command contains data (in RAM). That information will in the fetch cycle follow along to the Instruction Register and be used within the command.</p>
 		
 		<p>First a reminder of the fetch cycle: these two steps are executed at the beginning of every single command. The command <em>Value</em> from the table above in combination with the step value from the Addresser form the 8-bit address to the Control ROM, and the data stored drives all control signals in the table below (16 bits can be written as two HEX values to store in the ROM).</p>
 		
-		<img class="thumbnail" src="table04.png" data-high-res="table04.png" style="cursor: pointer;" width=630px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table04.png" data-high-res="table04.png" width="630">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>First step is to get the value in the Program Counter (CO) and place it in the RAM Address register (MI). In the second step the value from RAM (RO) is placed in the Instruction Register (II). At the same time the Program Counter value is increased by 1 (CE). All bits on one row are set during the falling edge of clock (because of the inverter in the Addresser) and are then "executed" on the next rising edge on clock.</p>
@@ -460,10 +460,10 @@
 		<p><br></p>
 		<p><strong>0000 - NOP - No Operation</strong></p>
 		
-		<img class="thumbnail" src="table05.png" data-high-res="table05.png" style="cursor: pointer;" width=630px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table05.png" data-high-res="table05.png" width="630">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>Parameter: None<br>Length: 2 (5)</p>
@@ -475,10 +475,10 @@
 		<p><br></p>
 		<p><strong>0001 - LDA - Load A Register</strong></p>
 		
-		<img class="thumbnail" src="table06.png" data-high-res="table06.png" style="cursor: pointer;" width=630px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table06.png" data-high-res="table06.png" width="630">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>Parameter: RAM address<br>Length: 4 (5)</p>
@@ -495,10 +495,10 @@
 		<p><br></p>
 		<p><strong>0010 - ADD - Add value to the Accumulator</strong></p>
 		
-		<img class="thumbnail" src="table07.png" data-high-res="table07.png" style="cursor: pointer;" width=630px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table07.png" data-high-res="table07.png" width="630">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>Parameter: RAM address<br>Length: 5 (5)</p>
@@ -516,10 +516,10 @@
 		<p><br></p>
 		<p><strong>0011 - SUB - Subtract value from the Accumulator</strong></p>
 		
-		<img class="thumbnail" src="table08.png" data-high-res="table08.png" style="cursor: pointer;" width=630px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table08.png" data-high-res="table08.png" width="630">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>Parameter: RAM address<br>Length: 5 (5)</p>
@@ -537,10 +537,10 @@
 		<p><br></p>
 		<p><strong>0100 - STA - Store Accumulator value to memory</strong></p>
 		
-		<img class="thumbnail" src="table09.png" data-high-res="table09.png" style="cursor: pointer;" width=630px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table09.png" data-high-res="table09.png" width="630">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>Parameter: RAM address<br>Length: 4 (5)</p>
@@ -557,10 +557,10 @@
 		<p><br></p>
 		<p><strong>0101 - LDI - Load Reg A Immediately</strong></p>
 		
-		<img class="thumbnail" src="table10.png" data-high-res="table10.png" style="cursor: pointer;" width=630px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table10.png" data-high-res="table10.png" width="630">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>Parameter: A 4-bit value (0-15)<br>Length: 3 (5)</p>
@@ -576,10 +576,10 @@
 		<p><br></p>
 		<p><strong>0110 - J - Unconditional Jump </strong></p>
 		
-		<img class="thumbnail" src="table11.png" data-high-res="table11.png" style="cursor: pointer;" width=630px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table11.png" data-high-res="table11.png" width="630">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>Parameter: Target RAM address<br>Length: 3 (5)</p>
@@ -595,10 +595,10 @@
 		<p><br></p>
 		<p><strong>0111 - JC - Conditional Jump, if Carry Flag is set</strong></p>
 		
-		<img class="thumbnail" src="table12.png" data-high-res="table12.png" style="cursor: pointer;" width=630px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table12.png" data-high-res="table12.png" width="630">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>Parameter: Target RAM address<br>Length: 3 (5)</p>
@@ -614,10 +614,10 @@
 		<p><br></p>
 		<p><strong>1000 - JZ - Conditional Jump, if Zero Flag is set</strong></p>
 		
-		<img class="thumbnail" src="table13.png" data-high-res="table13.png" style="cursor: pointer;" width=630px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table13.png" data-high-res="table13.png" width="630">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>Parameter: Target RAM address<br>Length: 3 (5)</p>
@@ -633,10 +633,10 @@
 		<p><br></p>
 		<p><strong>1110 - OUT - Output to display</strong></p>
 		
-		<img class="thumbnail" src="table14.png" data-high-res="table14.png" style="cursor: pointer;" width=630px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table14.png" data-high-res="table14.png" width="630">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>Parameter: None<br>Length: 3 (5)</p>
@@ -652,10 +652,10 @@
 		<p><br></p>
 		<p><strong>1111 - HLT - Halt computer</strong></p>
 		
-		<img class="thumbnail" src="table15.png" data-high-res="table15.png" style="cursor: pointer;" width=630px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table15.png" data-high-res="table15.png" width="630">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>Parameter: None<br>Length: 3 (5)</p>
@@ -676,20 +676,20 @@
 		
 		<p>It all begins with a lookup table with all commands and their values. Remember: they go into the upper nibble.</p>
 		
-		<img class="thumbnail" src="table16.png" data-high-res="table16.png" style="cursor: pointer;" width=200px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table16.png" data-high-res="table16.png" width="200">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>The parameter goes in the lower nibble, and it actually doesn't matter if there is any data there for the parameter-less commands - they will not be used anyway. But it looks cleaner and is less confusing if those commands have the lower half as 0000.</p>
 		
 		<p>Also remember that the parameter is always a 4-bit value, this always makes the command and parameter one byte combined. A few half-smart cell operations later, and the command value and the parameter value (if applicable) are combined to new values and are ready to copy. It looks like this:</p>
 		
-		<img class="thumbnail" src="table17.png" data-high-res="table17.png" style="cursor: pointer;" width=630px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table17.png" data-high-res="table17.png" width="630">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>The columns "upper" and "lower" are automatically created from the "CMD/VAL" and "Param." Columns. The code is written in the light green columns, and the darker green column is the finished code to copy.</p>
@@ -716,10 +716,10 @@
 		<p><strong>One-way counter</strong>
 		<br>Store value 3 to register address, clear register, then count upwards with that value. Value will roll over 255 and continue counting.</p>
 		
-		<img class="thumbnail" src="table18.png" data-high-res="table18.png" style="cursor: pointer;" width=630px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table18.png" data-high-res="table18.png" width="630">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>The Jump command on address 5 (to address 3) is unconditional and will always be executed which means that the code will run the three last commands forever. A slightly different variant would be to prepare the value 3 in address F from beginning and simply skip the first two lines, but I wanted to verify that those two commands worked as expected.</p>
@@ -727,10 +727,10 @@
 		<p><strong>Two-way counter</strong>
 		<br>This program will start at 0, count up to 255, then count down to 0 and repeat forever.</p>
 		
-		<img class="thumbnail" src="table19.png" data-high-res="table19.png" style="cursor: pointer;" width=630px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table19.png" data-high-res="table19.png" width="630">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>The main purpose of this program was to test the conditional jump commands. It will count upwards with one (value from address F) and then jump to address 4 if carry flag is set (we have performed 255 + 1 = 0). If we have not reached this point the program will jump back to address 0 and count up again. Once we jump to address 4 we will perform a subtract operation (with the same 1 from address F). Finally a similar check as before where we jump back to address 0 in case the zero flag is set (we have performed 1 - 1 = 0), otherwise we jump back to address 4 and repeat the subtraction.</p>
@@ -738,10 +738,10 @@
 		<p><strong>Multiplication</strong>
 		<br>The ALU do not support multiplication, this program will perform one "manually".</p>
 		
-		<img class="thumbnail" src="table20.png" data-high-res="table20.png" style="cursor: pointer;" width=630px>
-		<div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;">
-			<span id="closeButton" style="position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer;">&times;</span>
-			<img id="fullSizeImage" src="" alt="Full size image" style="max-width: 90%; max-height: 90%;">
+		<img class="thumbnail" src="table20.png" data-high-res="table20.png" width="630">
+		<div id="imageModal" class="modal">
+			<span id="closeButton">&times;</span>
+			<img id="fullSizeImage" src="" alt="Full size image">
 		</div>
 		
 		<p>By filling up almost the entire memory it is possible to perform a multiplication with a loop method. It will take long time and is limited to a result of maximum 255 though. The idea is to add one value to a "result" address (that starts at 0) and loop this behaviour until the second value has decreased to 0 (by subtracting it with 1 every loop). Once the second value is zero, the conditional jump (JZ) exits the loop, outputs the result to display and then halts the computer. This would probably be a lot faster and more code efficient if the ALU supported multiplication.</p>
