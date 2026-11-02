@@ -19,7 +19,7 @@
     <section class="content">
 		<h2>1. Introduction</h2>
 		
-        <p>After watching a programming video on <em>Wave Function Collapse</em> (<em>WFC</em> from now on) I got inspired to play around with connected tiles. I didn't want a direct copy, so I made a challenge of my own with randomness and connected tiles. And as far as I understood the concept of <em>WFC</em>, it shall contain a bit more than what I did, but the basic idea is similar (or even the same?), but it might be called somehting else.</p>
+        <p>After watching a programming video on <em>Wave Function Collapse</em> (<em>WFC</em> from now on) I got inspired to play around with connected tiles. I didn't want a direct copy, so I made a challenge of my own with randomness and connected tiles. And as far as I understood the concept of <em>WFC</em>, it shall contain a bit more than what I did, but the basic idea is similar (or even the same?).</p>
 
         <div class="img-container">
             <img src="CT_01-final.png" alt="End result">
@@ -27,7 +27,7 @@
 		
 		<h2>2. Basic Functionality</h2>
 
-        <p>I started with deciding on what tileset to use. I made one myself and it only contains a black line (the connecting one) on a white background. The tiles are 16x16 pixels and to save a bit of time on programming, I included all the rotated parts as well. In a future version, this set should only contain six tiles. To clearer indicate a "start/stop" tile I made it into a blob. It makes the tiles look more like a circuit board than a road system, but either one works for me. (I've seen a few examples of <em>WFC</em> using circuit board tilesets.)</p>
+        <p>I started with deciding on what tileset to use. I made one myself and it only contains a black line (the connecting one) on a white background. The tiles are 16x16 pixels and to save a bit of time on programming, I included all the rotated parts as well. In a future version, this set should only contain six tiles. To clearly indicate a "start/stop" tile I made it into a blob. It makes the tiles look more like a circuit board than a road system, but either one works for me. (I've seen a few examples of <em>WFC</em> using circuit board tilesets.)</p>
 
         <div class="img-container">
             <img src="CT_02-tiles.png" alt="Tiles">
@@ -35,18 +35,20 @@
 
         <p>The <em>Tile</em> class is very simple, and because I don't need to handle rotation in this first test, I simply have a boolean value for each side with a connection (Up, Down, Left, Right). And when selecting the next tile I will only look at the adjacent neighbors going from left to right, top to bottom (which means I only need to match with up and left). Someone called this a <em>Linear Scanline</em> method, but I don't know if that's an established term. Most examples of <em>WFC</em> I've seen seem to use more of a floodfill style, and maybe even in order of tiles with lowest <em>entropy</em>/possible choices first. But in this post, we'll keep it simple!</p>
 
-        <p>Because I start in the top-left corner, I obviously can't match tiles above or to the left, so I decided to treat all tiles off-grid as having no connections. It isn't very important but that's why there are no connections going off-grid, and doing this check first made the code for the next step a bit simpler.</p>
+        <p>Because I start in the top-left corner, I obviously can't match tiles above or to the left, so I decided to treat all tiles off-grid as having no connections. It isn't very important but that's why there are no connections going off-grid, and doing this check first made the code for the next step a bit simpler. We will loop through the entire field and do these activities for every position:</p>
 
 <pre><code>bool connectionAbove = false;
-bool connectionLeft = false;</code></pre>
+bool connectionLeft = false;
 
-<pre><code>if (y != 0)     // If we're on top row we'll keep connectionAbove as false
+if (y != 0)     // If we're on top row we'll keep connectionAbove as false
     if (field[y - 1, x].Down == true)    // Check if tile above has a connection (downwards)
-        connectionAbove = true;</code></pre>
+        connectionAbove = true;
 
-<pre><code>if (x != 0)    // Same as before, but with leftmost column
+if (x != 0)    // Same as before, but with leftmost column
     if (field[y, x - 1].Right == true)    // Check connection in tile to the left
         connectionLeft = true;</code></pre>
+
+		<p>Now the new tile knows the requirements, so let's make a list of candidates:</p>
 
 <pre><code>List&lt;Tile&gt; possibleTiles = new List&lt;Tile&gt;();
 possibleTiles = (from connections in tiles
@@ -54,14 +56,14 @@ possibleTiles = (from connections in tiles
                  where connections.Left == connectionLeft
                  select connections).ToList();</code></pre>
 
-        <p>With one simple "query" we have a list of tiles that connects correctly to tiles above and to the left. The fun thing with Lists is that we can do a sub-selection with new parameters for those tiles. And then again: I actually only check for one additional thing: if we are on bottom row or rightmost column (same as for top row or leftmost column). In those cases I want to remove tiles connecting downwards or the the right.</p>
+        <p>With one simple "query" we have a list of tiles that connects correctly to tiles above and to the left. The fun thing with <em>Lists</em> is that we can do a sub-selection with new parameters. And then again: I actually check for two one additional things: if we are on bottom row or rightmost column (same as for top row or leftmost column). In those cases I want to remove tiles connecting downwards or the the right (so we don't get connections off-grid).</p>
 
 <pre><code>if (y + 1 == sizeY)
     possibleTiles = (from connections in possibleTiles
                      where connections.Down == false
-                     select connections).ToList();</code></pre>
+                     select connections).ToList();
 
-<pre><code>if (x + 1 == sizeX)
+if (x + 1 == sizeX)
     possibleTiles = (from connections in possibleTiles
                      where connections.Right == false
                      select connections).ToList();</code></pre>
@@ -125,8 +127,10 @@ int[] range = new int[totalWeight];     // Create array with same length as weig
 
         <p>First I calculate a total weight for all possible tiles. In this example it would mean:</p>
 <pre><code>1 + 1 + 15 + 1 = 18</code></pre>
-        <p>Then I create an array of integers, 18 numbers long, and fill it with the corresponding index from <em>possibleTiles</em></p>
-<pre><code>int index = 0;      // What slot in above array we shall fill
+        <p>Then I create an array of integers, 18 numbers long, and fill it with the corresponding index from the <em>possibleTiles</em> list.</p>
+<pre><code>int[] range = new int[totalWeight];     // Create array with same length as weightint 
+index = 0;              // What slot in above array we shall fill
+
 for (int i = 0; i &lt; possibleTiles.Count; i++)   // Loop through the candidates...
 {
     for (int j = 0; j &lt; possibleTiles[i].Weight; j++)  // ...and "weight" times...
@@ -152,7 +156,7 @@ return possibleTiles[range[selected]];     // ...to get the weighted result</cod
 
         <p>Before we end I should mention the seed (seen in the title in each screenshot). It's not of importance for this test project, but I like the idea of including seeds into the projects using a random number generator. It makes it easier to go back in case of problems, or to share an interesting pattern.</p>
 
-        <p>And that's how far this project reaches, I'm happy with the outcome, and I would really like to step things up a bit with more interesting tiles (like roads, parks and different types of buildings), try to add more rules but most of all use tiles with more connections per side. If I would be using the same tileset as in this post, using three connections per side, the "road" would be the center part of each side and every tile would have a total of eight connections.</p>
+        <p>And that's how far this project reached! I'm happy with the outcome, and I would really like to step things up a bit with more interesting tiles (like roads, parks and different types of buildings), and that would mean more rules to enable use of tiles with more connections per side. I have a feeling that the "scanline" method must be replaced as well, maybe to a "floodfill" style instead.</p>
     </section>
 </article>
 
