@@ -45,32 +45,32 @@
 bool connectionLeft = false;
 
 if (y != 0)     // If we're on top row we'll keep connectionAbove as false
-	if (field[y - 1, x].Down == true)    // Check if tile above has a connection (downwards)
-		connectionAbove = true;
+    if (field[y - 1, x].Down == true)    // Check if tile above has a connection (downwards)
+        connectionAbove = true;
 
 if (x != 0)    // Same as before, but with leftmost column
-	if (field[y, x - 1].Right == true)    // Check connection in tile to the left
-		connectionLeft = true;</code></pre>
+    if (field[y, x - 1].Right == true)    // Check connection in tile to the left
+        connectionLeft = true;</code></pre>
 
 	<p>Now the new tile knows the requirements, so let's make a list of candidates:</p>
 
 <pre><code>List&lt;Tile&gt; possibleTiles = new List&lt;Tile&gt;();
 possibleTiles = (from connections in tiles
-				 where connections.Up == connectionAbove    
-				 where connections.Left == connectionLeft
-				 select connections).ToList();</code></pre>
+                 where connections.Up == connectionAbove    
+                 where connections.Left == connectionLeft
+                 select connections).ToList();</code></pre>
 
 	<p>With one simple "query" we have a list of tiles that connects correctly to tiles above and to the left. The fun thing with <i>Lists</i> is that we can do a sub-selection with new parameters. And then again: I actually check for two one additional things: if we are on bottom row or rightmost column (same as for top row or leftmost column). In those cases I want to remove tiles connecting downwards or the the right (so we don't get connections off-grid).</p>
 
 <pre><code>if (y + 1 == sizeY)
-	possibleTiles = (from connections in possibleTiles
-					 where connections.Down == false
-					 select connections).ToList();
+    possibleTiles = (from connections in possibleTiles
+                     where connections.Down == false
+                     select connections).ToList();
 
 if (x + 1 == sizeX)
-	possibleTiles = (from connections in possibleTiles
-					 where connections.Right == false
-					 select connections).ToList();</code></pre>
+    possibleTiles = (from connections in possibleTiles
+                     where connections.Right == false
+                     select connections).ToList();</code></pre>
 
 	<p>We finally have a list of possible tiles to place. But they are equally probable (towards each other within the final selection) and creates very boring patterns. Looking at it, I just get a feeling of random noise, and it's not what I'm after.</p>
 
@@ -84,22 +84,22 @@ if (x + 1 == sizeX)
 
 <pre><code>public class Tile
 {
-	public Bitmap Image { get; }
-	public bool Up { get; }
-	public bool Down { get; }
-	public bool Left { get; }
-	public bool Right { get; }
-	public int Weight { get; }
+    public Bitmap Image { get; }
+    public bool Up { get; }
+    public bool Down { get; }
+    public bool Left { get; }
+    public bool Right { get; }
+    public int Weight { get; }
 
-	public Tile(Bitmap image, int weight, bool up, bool down, bool left, bool right)
-	{
-		this.Image = image;
-		this.Weight = weight;
-		this.Up = up;
-		this.Down = down;
-		this.Left = left;
-		this.Right = right;
-	}
+    public Tile(Bitmap image, int weight, bool up, bool down, bool left, bool right)
+    {
+        this.Image = image;
+        this.Weight = weight;
+        this.Up = up;
+        this.Down = down;
+        this.Left = left;
+        this.Right = right;
+    }
 }</code></pre>
 
 	<p>Now when I declare the tiles, I specify a weight to each tile that will affect how common they are. In the previous example, it would mean that all have equal weight. To get the desired pattern, simply increase the ones you want more of, and after that it's a matter of tuning. So let's see how it looks if I give empty tiles a weight of 30, straight "roads" a weight of 15 and keeping the rest as 1.</p>
@@ -125,7 +125,7 @@ if (x + 1 == sizeX)
 <pre><code>int totalWeight = 0;    // To calculate total weight of possibleTiles
 for (int i = 0; i &lt; possibleTiles.Count; i++)
 {
-	totalWeight += possibleTiles[i].Weight;     // Add to total weight
+    totalWeight += possibleTiles[i].Weight;     // Add to total weight
 }
 int[] range = new int[totalWeight];     // Create array with same length as weight</code></pre>
 
@@ -140,11 +140,11 @@ index = 0;              // What slot in above array we shall fill
 
 for (int i = 0; i &lt; possibleTiles.Count; i++)   // Loop through the candidates...
 {
-	for (int j = 0; j &lt; possibleTiles[i].Weight; j++)  // ...and "weight" times...
-	{
-		range[index] = i;       // ...to fill with that candidate number
-		index++;                
-	}
+    for (int j = 0; j &lt; possibleTiles[i].Weight; j++)  // ...and "weight" times...
+    {
+        range[index] = i;       // ...to fill with that candidate number
+        index++;                
+    }
 }</code></pre>.
 
 	<p>In this example, it would mean that 15 out of the 18 values in the array <i>range</i> get the number (index) 2 (which corresponds to the straight tile):</p>
