@@ -31,7 +31,7 @@
 
 	<h2>2. Basic Functionality</h2>
 
-	<p>I started with deciding on what tileset to use. I made one myself and it only contains a black line (the connecting one) on a white background. The tiles are 16x16 pixels and to save a bit of time on programming, I included all the rotated parts as well. In a future version, this set should only contain six tiles. To clearly indicate a "start/stop" tile I made it into a blob. It makes the tiles look more like a circuit board than a road system, but either one works for me. (I've seen a few examples of <i>WFC</i> using circuit board tilesets.)</p>
+	<p>I started with deciding on what tileset to use. I made one myself and it only contains a black line (the connecting one) on a white background. The tiles are 16x16 pixels and to save a bit of time on programming, I included all the rotated parts as well. In a future version, this set should only contain six tiles. To clearly indicate a “start/stop” tile I made it into a blob. It makes the tiles look more like a circuit board than a road system, but either one works for me. (I've seen a few examples of <i>WFC</i> using circuit board tilesets.)</p>
 
 	<div class="img-container">
 		<img src="CT_02-tiles.png" alt="Tiles">
@@ -60,7 +60,7 @@ possibleTiles = (from connections in tiles
                  where connections.Left == connectionLeft
                  select connections).ToList();</code></pre>
 
-	<p>With one simple "query" we have a list of tiles that connects correctly to tiles above and to the left. The fun thing with <i>Lists</i> is that we can do a sub-selection with new parameters. And then again: I actually check for two one additional things: if we are on bottom row or rightmost column (same as for top row or leftmost column). In those cases I want to remove tiles connecting downwards or the the right (so we don't get connections off-grid).</p>
+	<p>With one simple “query” we have a list of tiles that connects correctly to tiles above and to the left. The fun thing with <i>Lists</i> is that we can do a sub-selection with new parameters. And then again: I actually check for two one additional things: if we are on bottom row or rightmost column (same as for top row or leftmost column). In those cases I want to remove tiles connecting downwards or the the right (so we don't get connections off-grid).</p>
 
 <pre><code>if (y + 1 == sizeY)
     possibleTiles = (from connections in possibleTiles
@@ -102,7 +102,7 @@ if (x + 1 == sizeX)
     }
 }</code></pre>
 
-	<p>Now when I declare the tiles, I specify a weight to each tile that will affect how common they are. In the previous example, it would mean that all have equal weight. To get the desired pattern, simply increase the ones you want more of, and after that it's a matter of tuning. So let's see how it looks if I give empty tiles a weight of 30, straight "roads" a weight of 15 and keeping the rest as 1.</p>
+	<p>Now when I declare the tiles, I specify a weight to each tile that will affect how common they are. In the previous example, it would mean that all have equal weight. To get the desired pattern, simply increase the ones you want more of, and after that it's a matter of tuning. So let's see how it looks if I give empty tiles a weight of 30, straight “roads” a weight of 15 and keeping the rest as 1.</p>
 
 	<div class="img-container">
 		<img src="CT_04-30empty_15straights.png" alt="Result with empties and straights">
@@ -140,12 +140,12 @@ index = 0;              // What slot in above array we shall fill
 
 for (int i = 0; i &lt; possibleTiles.Count; i++)   // Loop through the candidates...
 {
-    for (int j = 0; j &lt; possibleTiles[i].Weight; j++)  // ...and "weight" times...
+    for (int j = 0; j &lt; possibleTiles[i].Weight; j++)  // ...and “weight” times...
     {
         range[index] = i;       // ...to fill with that candidate number
         index++;                
     }
-}</code></pre>.
+}</code></pre>
 
 	<p>In this example, it would mean that 15 out of the 18 values in the array <i>range</i> get the number (index) 2 (which corresponds to the straight tile):</p>
 
@@ -156,7 +156,7 @@ for (int i = 0; i &lt; possibleTiles.Count; i++)   // Loop through the candidate
 <pre><code>int selected = rnd.Next(totalWeight);      // Random value in total weight...
 return possibleTiles[range[selected]];     // ...to get the weighted result</code></pre>
 
-	<p>With the odds in this example, I wouldn't call the straight connection very "lucky" with a ~83% probability. The other three have ~6% chance each (so in this example the straight one is eactly 15 times more probable than one of the other individuals, but only 5 times as probable than <i>any</i> other tile). The tricky part is now to find a good balance between them all. A larger field helps for sure, here I have mixed things up a bit and increased the size.</p>
+	<p>With the odds in this example, I wouldn't call the straight connection very “lucky” with a ~83% probability. The other three have ~6% chance each (so in this example the straight one is eactly 15 times more probable than one of the other individuals, but only 5 times as probable than <i>any</i> other tile). The tricky part is now to find a good balance between them all. A larger field helps for sure, here I have mixed things up a bit and increased the size.</p>
 
 	<div class="img-container">
 		<img src="CT_07-40-30.png" alt="Final result larger">
@@ -166,7 +166,7 @@ return possibleTiles[range[selected]];     // ...to get the weighted result</cod
 
 	<p>Before we end I should mention the seed (seen in the title in each screenshot). It's not of importance for this test project, but I like the idea of including seeds into the projects using a random number generator. It makes it easier to go back in case of problems, or to share an interesting pattern.</p>
 
-	<p>And that's how far this project reached! I'm happy with the outcome, and I would really like to step things up a bit with more interesting tiles (like roads, parks and different types of buildings), and that would mean more rules to enable use of tiles with more connections per side. I have a feeling that the "scanline" method must be replaced as well, maybe to a "floodfill" style instead.</p>
+	<p>And that's how far this project reached! I'm happy with the outcome, and I would really like to step things up a bit with more interesting tiles (like roads, parks and different types of buildings), and that would mean more rules to enable use of tiles with more connections per side. I have a feeling that the “scanline” method must be replaced as well, maybe to a floodfill” style instead.</p>
 
 </section>
 
