@@ -753,44 +753,57 @@
 
 	<p>This so-called computer was my first time designing a computer, and as already mentioned one could discuss whether it even qualifies as one. However, I learned the foundations to computer design and by doing this documentation I hope that I won't forget it anytime soon - but rather continue with a next generation computer simulation!</p>
 
+</section>	
 
-	<script type="text/javascript">
-		// Get all thumbnail images
+</article>
+</main>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
 		const thumbnails = document.querySelectorAll('.thumbnail');
 		const modal = document.getElementById('imageModal');
 		const fullSizeImage = document.getElementById('fullSizeImage');
 		const closeButton = document.getElementById('closeButton');
 
-		// Add a click listener to each thumbnail
+		if (!modal || !fullSizeImage || !closeButton) {
+			console.warn('Modal elements missing on page.');
+			return;
+		}
+
 		thumbnails.forEach(thumbnail => {
 			thumbnail.addEventListener('click', () => {
-				// Get the high-res URL from the data-high-res attribute of the clicked image
-				const highResUrl = thumbnail.getAttribute('data-high-res');
-
-				// Set the src of the modal image and display the modal
+				const highResUrl = thumbnail.getAttribute('data-high-res') || thumbnail.src;
 				fullSizeImage.src = highResUrl;
+				fullSizeImage.alt = thumbnail.alt || 'Full size image';
 				modal.style.display = 'flex';
 			});
 		});
 
-		// Function to hide the modal (remains the same)
 		function closeModal() {
 			modal.style.display = 'none';
+			fullSizeImage.src = '';
 		}
 
-		// Add event listeners for closing the modal
 		closeButton.addEventListener('click', closeModal);
-		modal.addEventListener('click', closeModal);
+
+		modal.addEventListener('click', (event) => {
+			if (event.target === modal) {
+				closeModal();
+			}
+		});
+
+		document.addEventListener('keydown', (event) => {
+				if (event.key === 'Escape' && modal.style.display === 'flex') {
+					closeModal();
+				}
+			});
+		});
 	</script>
 
 	<noscript>
 		Please enable JavaScript to see the JavaScript element.
 	</noscript>
 
-</section>	
-
-</article>
-</main>
 </body>
 
 </html>
